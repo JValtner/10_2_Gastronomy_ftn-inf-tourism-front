@@ -2,10 +2,12 @@ import { TourResponse } from "../../model/tourResponse.model.js";
 import { TourService } from "../../service/tour.service.js";
 
 const tourService = new TourService();
+const userJSON = localStorage.getItem("user");
+const user = JSON.parse(userJSON)
 
 function renderData(): void {
-  const userId = parseInt(localStorage.getItem("userId") || "0");
-  tourService.getAll(userId)
+  
+  tourService.getAll(user.id)
     .then((response: TourResponse) => {   
       const table = document.querySelector('table tbody');
       if (!table) {
@@ -90,10 +92,14 @@ function renderData(): void {
     });
 }
 
+const logout = document.querySelector('#logout') as HTMLAnchorElement;
+logout.addEventListener("click", ()=>{
+  localStorage.removeItem("user");
+  window.location.href = "../../../users/pages/login/login.html";
 
+})
 
 window.addEventListener('DOMContentLoaded', () => {
   renderData();
-  tourService.getwelcome()
-  
+  tourService.getwelcome() 
 });

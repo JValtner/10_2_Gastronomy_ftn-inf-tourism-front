@@ -111,7 +111,9 @@ export class TourService {
   username.textContent = "Dobrodosao: " + this.getName()
     }
     getName(): string{
-        return localStorage.getItem("username") || " Guest"
+        const userJSON = localStorage.getItem("user");
+        const user = JSON.parse(userJSON)
+        return user.username || " Guest"
   
 }
 }

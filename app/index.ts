@@ -1,3 +1,6 @@
+import { UserService } from "./users/service/user.service.js";
+
+const userService = new UserService
 const loginLink = document.querySelector('#login') as HTMLElement;
 const logoutLink = document.querySelector('#logout') as HTMLElement;
 
@@ -12,18 +15,19 @@ function setUserLoginState(isLoggedIn: boolean) {
 }
 
 function handleLogout() {
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
-    setUserLoginState(false);
+  localStorage.removeItem("user");
+  setUserLoginState(false);
 }
 
 function checkLoginStatus() {
-    const username = localStorage.getItem('username');
-    if (username) {
-        setUserLoginState(true);
-    } else {
-        setUserLoginState(false);
-    }
+  const userJSON = localStorage.getItem("user");
+  const user = JSON.parse(userJSON)
+  if (user) {
+    setUserLoginState(true);
+  } else {
+    setUserLoginState(false);
+  }
+   userService.redirect(user);
 }
 
 const logoutElement = document.querySelector('#logout');
@@ -31,4 +35,7 @@ if (logoutElement) {
     logoutElement.addEventListener('click', handleLogout);
 }
 
+document.addEventListener('DOMContentLoaded', ()=>{
 checkLoginStatus();
+})
+

@@ -17,7 +17,7 @@ function setUserLoginState(isLoggedIn: boolean) {
 
 function handleLogin(event: Event) {
 
-event.preventDefault();
+  event.preventDefault();
   const form = document.querySelector("form") as HTMLFormElement;
   const formData = new FormData(form);
   const username = formData.get("username") as string;
@@ -25,21 +25,9 @@ event.preventDefault();
   userService
     .login(username, password)
     .then((user) => {
-      localStorage.setItem("userId", user.id.toString());
-      localStorage.setItem("username", user.username);
-      localStorage.setItem("role", user.role);
+      localStorage.setItem("user", JSON.stringify(user));
       setUserLoginState(true);
-
-      if (user.role === "vlasnik") {
-        window.location.href = `../../../restaurants/pages/restaurants/restaurants.html?ownerId=${user.id}`;
-      } else if (user.role === "vodic") {
-        window.location.href = `../../../tours/pages/userTours/userTours.html?ownerId=${user.id}`;
-        
-      } else if (user.role === "turista") {
-        window.location.href = "";
-      } else {
-        window.location.href = "/login.html";
-      }
+      userService.redirect(user);
     })
     .catch((error) => {
       console.error("Login failed", error.message);
@@ -47,20 +35,21 @@ event.preventDefault();
 }
 
 function handleLogout() {
-  localStorage.removeItem("userId");
-  localStorage.removeItem("username");
-  localStorage.removeItem("role");
+  localStorage.removeItem("user");
   setUserLoginState(false);
 }
 
 function checkLoginStatus() {
-  const username = localStorage.getItem("username");
-  if (username) {
+  const userJSON = localStorage.getItem("user");
+  const user = JSON.parse(userJSON)
+  if (user) {
     setUserLoginState(true);
+    userService.redirect(user);
   } else {
     setUserLoginState(false);
   }
 }
+
 
 if (submitButton) {
   submitButton.addEventListener("click", handleLogin);

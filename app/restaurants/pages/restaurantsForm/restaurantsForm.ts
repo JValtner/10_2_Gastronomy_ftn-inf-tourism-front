@@ -216,3 +216,10 @@ if (id) {
   headTitle.innerHTML = "Izmeni restoran";
   fillForm(id);
 }
+ 
+const logout = document.querySelector('#logout') as HTMLAnchorElement;
+logout.addEventListener("click", ()=>{
+  localStorage.removeItem("user");
+  window.location.href = "../../../users/pages/login/login.html";
+
+})

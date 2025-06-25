@@ -104,6 +104,13 @@ function loadAndRenderRestaurants(): void {
     .catch((error) => console.error("Greška pri učitavanju restorana:", error));
 }
 
+const logout = document.querySelector('#logout') as HTMLAnchorElement;
+logout.addEventListener("click", ()=>{
+  localStorage.removeItem("user");
+  window.location.href = "../../../users/pages/login/login.html";
+
+})
+
 document.addEventListener("DOMContentLoaded", () => {
   loadAndRenderRestaurants();
 });
