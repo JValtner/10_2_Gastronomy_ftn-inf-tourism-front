@@ -20,12 +20,17 @@ function renderRestaurants(restaurants: Restaurant[]): void {
   div.innerHTML = "";
 
   restaurants.forEach((restaurant) => {
+    //Kartica
     const card = document.createElement("div");
     card.className = "restaurant-card";
 
+    //Info div
+    const info = document.createElement("div");
+    info.className = "restaurant-info";
+
     //Prvo cu prikazati sliku
     const image = document.createElement("img");
-    image.src = restaurant.imageURL;
+    image.src = restaurant.imageUrl;
     image.className = "restaurant-image";
 
     //Zatim naslov
@@ -55,6 +60,9 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     const detailsBtn = document.createElement("button");
     detailsBtn.textContent = "Detalji";
     detailsBtn.className = "restaurant-button";
+    detailsBtn.addEventListener("click", function () {
+      window.location.href = `../restaurantDetails/restaurantDetails.html?id=${restaurant.id}`;
+    });
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "Izmeni";
@@ -80,12 +88,13 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     actions.appendChild(detailsBtn);
     actions.appendChild(editBtn);
     actions.appendChild(deleteBtn);
+    info.appendChild(name);
+    info.appendChild(description);
+    info.appendChild(capacity);
+    info.appendChild(status);
     card.appendChild(image);
-    card.appendChild(name);
-    card.appendChild(description);
-    card.appendChild(capacity);
-    card.appendChild(status);
-    card.append(actions);
+    card.appendChild(info);
+    card.appendChild(actions);
     div.appendChild(card);
   });
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="restaurant-details-head-title"></title>
+    <link
+      rel="stylesheet"
+      href="../../../../dist/restaurants/pages/restaurantDetails/restaurantDetails.css"
+    />
+    <script
+      type="module"
+      src="../../../../dist/restaurants/pages/restaurantDetails/restaurantDetails.js"
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="../../../index.html">Home</a></li>
+        <!--<li class="nav-item" id="login">
+          <a href="../../../users/pages/login/login.html">Login</a>
+        </li> -->
+        <li class="nav-item" id="logout">
+          <a href="../../../index.html">Logout</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="restaurants-title-container">
+      <h1 id="restaurant-title"></h1>
+      <button id="addMealBtn" class="restaurant-button">Dodaj novo jelo</button>
+    </div>
+    <div id="restaurant-details-container">
+      <div id="restaurant-details-text"></div>
+      <div id="restaurant-details-photos"></div>
+    </div>
+    <div id="meals-container"></div>
+  </body>
+</html>
