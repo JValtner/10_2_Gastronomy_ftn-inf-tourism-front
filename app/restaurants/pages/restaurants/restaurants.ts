@@ -74,6 +74,7 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Obrisi";
     deleteBtn.className = "restaurant-button";
+    deleteBtn.id = "deleteBtn";
     deleteBtn.addEventListener("click", function () {
       restaurantService
         .delete(restaurant.id.toString())

@@ -92,6 +92,22 @@ body {
       align-items: flex-end;
       padding: 5px;
       padding-top: 10px;
+
+      #deleteBtn {
+        background-color: $warn-color;
+
+        &:hover {
+          background-color: darken($warn-color, 10%);
+          box-shadow: 0 6px 12px rgba(217, 83, 79, 0.5); // crvena sa 50% providnosti
+          transform: translateY(-3px);
+          cursor: pointer;
+        }
+
+        &:active {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(217, 83, 79, 0.3); // crvena sa 30% providnosti
+        }
+      }
     }
   }
 }

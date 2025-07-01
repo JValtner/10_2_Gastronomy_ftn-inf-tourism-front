@@ -47,7 +47,7 @@ function fillForm(restaurantId: string): void {
     nameInput.value = restaurant.name;
     descriptionInput.value = restaurant.description;
     capacityInput.value = restaurant.capacity.toString();
-    imageURLInput.value = restaurant.imageURL;
+    imageURLInput.value = restaurant.imageUrl;
     latitudeInput.value = restaurant.latitude.toString();
     longitudeInput.value = restaurant.longitude.toString();
     statusSelect.value = restaurant.status;
@@ -144,7 +144,7 @@ function submitForm(): void {
     name: nameInput.value.trim(),
     description: descriptionInput.value.trim(),
     capacity: parseInt(capacityInput.value.trim()),
-    imageURL: imageURLInput.value.trim(),
+    imageUrl: imageURLInput.value.trim(),
     latitude: parseFloat(latitudeInput.value.trim()),
     longitude: parseFloat(longitudeInput.value.trim()),
     status: statusSelect.value,

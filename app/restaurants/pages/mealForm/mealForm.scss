@@ -13,7 +13,7 @@ body {
   flex-direction: column;
 }
 
-#restaurant-form-container {
+#meal-form-container {
   margin-top: 30px;
   flex: 1;
   display: flex;
@@ -29,12 +29,12 @@ body {
 
 .half-image {
   width: 50%;
-  background-image: url("https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?cs=srgb&dl=pexels-life-of-pix-67468.jpg&fm=jpg");
+  background-image: url("https://forbes.vijesti.me/wp-content/uploads/2024/07/shutterstock_2278053615-1200x800-1-1000x667.jpg");
   background-size: cover;
   background-position: center;
 }
 
-#restaurant-form {
+#meal-form {
   width: 50%;
   padding: 40px 50px;
   display: flex;
@@ -97,18 +97,18 @@ body {
 }
 
 @media (max-width: 768px) {
-  #restaurant-form-container {
+  #meal-form-container {
     flex-direction: column;
     height: auto;
     width: 90vw;
   }
 
   .half-image,
-  #restaurant-form {
+  #meal-form {
     width: 100%;
   }
 
-  #restaurant-form {
+  #meal-form {
     padding: 20px;
   }
 

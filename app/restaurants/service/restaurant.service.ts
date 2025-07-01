@@ -1,3 +1,4 @@
+import { Meal } from "../model/meal.model.js";
 import { Restaurant } from "../model/restaurant.model.js";
 
 export class RestaurantService {
@@ -91,6 +92,42 @@ export class RestaurantService {
 
   delete(restaurantId: string): Promise<void> {
     return fetch(`${this.apiURL}/${restaurantId}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw { status: response.status, message: response.text };
+        }
+      })
+      .catch((error) => {
+        console.error(`Error:`, error.status);
+        throw error;
+      });
+  }
+
+  addMeal(restaurantId: string, formData: Meal): Promise<Meal> {
+    return fetch(`${this.apiURL}/${restaurantId}/meals`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw { status: response.status, message: response.text };
+        }
+        return response.json();
+      })
+      .then((meal: Meal) => {
+        return meal;
+      })
+      .catch((error) => {
+        console.error(`Error:`, error.status);
+        throw error;
+      });
+  }
+
+  deleteMeal(restaurantId: string, mealId: string): Promise<void> {
+    return fetch(`${this.apiURL}/${restaurantId}/meals/${mealId}`, {
       method: "DELETE",
     })
       .then((response) => {
