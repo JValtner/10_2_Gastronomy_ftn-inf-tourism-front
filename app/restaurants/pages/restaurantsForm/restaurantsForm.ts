@@ -3,6 +3,8 @@ import { RestaurantService } from "../../service/restaurant.service.js";
 
 const restaurantService = new RestaurantService();
 
+let restaurantMealsCount = 0;
+
 // Elementi
 const nameInput = document.getElementById("name") as HTMLInputElement;
 const descriptionInput = document.getElementById(
@@ -12,7 +14,10 @@ const capacityInput = document.getElementById("capacity") as HTMLInputElement;
 const imageURLInput = document.getElementById("imageURL") as HTMLInputElement;
 const latitudeInput = document.getElementById("latitude") as HTMLInputElement;
 const longitudeInput = document.getElementById("longitude") as HTMLInputElement;
-const statusSelect = document.getElementById("status") as HTMLSelectElement;
+const mealCount = document.querySelector("#meals-count");
+const statusRadios = document.querySelectorAll(
+  'input[name="status"]'
+) as NodeListOf<HTMLInputElement>;
 const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
 
 // Error elementi
@@ -47,10 +52,21 @@ function fillForm(restaurantId: string): void {
     nameInput.value = restaurant.name;
     descriptionInput.value = restaurant.description;
     capacityInput.value = restaurant.capacity.toString();
-    imageURLInput.value = restaurant.imageURL;
+    imageURLInput.value = restaurant.imageUrl;
     latitudeInput.value = restaurant.latitude.toString();
     longitudeInput.value = restaurant.longitude.toString();
-    statusSelect.value = restaurant.status;
+    statusRadios.forEach((radio) => {
+      radio.checked = radio.value === restaurant.status;
+    });
+    restaurantMealsCount = restaurant.meals.length;
+    if (mealCount) {
+      mealCount.textContent = `Broj jela u ponudi: ${restaurant.meals.length}`;
+      mealCount.classList.remove("success", "warning");
+      mealCount.classList.add(
+        restaurantMealsCount >= 5 ? "success" : "warning"
+      );
+    }
+    updateStatusRadios();
     updateSubmitButton();
   });
 }
@@ -124,6 +140,26 @@ function validateLongitude(): boolean {
   }
 }
 
+// Provera za objavu restorana
+function canPublish(): boolean {
+  const hasEnoughMeals = restaurantMealsCount >= 5;
+  const imageUrlValid = imageURLInput.value.trim() !== "";
+
+  return hasEnoughMeals && imageUrlValid;
+}
+
+// Uklj/Isklj radio dugme za objavu restorana
+function updateStatusRadios() {
+  statusRadios.forEach((radio) => {
+    if (radio.value === "objavljeno") {
+      radio.disabled = !canPublish();
+      if (radio.disabled && radio.checked) {
+        radio.checked = false;
+      }
+    }
+  });
+}
+
 // Uklj/isklj dugme
 function updateSubmitButton(): boolean {
   const valid =
@@ -138,16 +174,28 @@ function updateSubmitButton(): boolean {
   return valid;
 }
 
+// Spineri
+function showSpinner(): void {
+  const spinner = document.getElementById("loading-spinner");
+  if (spinner) spinner.classList.remove("hidden");
+}
+
+function hideSpinner(): void {
+  const spinner = document.getElementById("loading-spinner");
+  if (spinner) spinner.classList.add("hidden");
+}
+
 // Submit forme
 function submitForm(): void {
   const formData: Restaurant = {
     name: nameInput.value.trim(),
     description: descriptionInput.value.trim(),
     capacity: parseInt(capacityInput.value.trim()),
-    imageURL: imageURLInput.value.trim(),
+    imageUrl: imageURLInput.value.trim(),
     latitude: parseFloat(latitudeInput.value.trim()),
     longitude: parseFloat(longitudeInput.value.trim()),
-    status: statusSelect.value,
+    status:
+      Array.from(statusRadios).find((r) => r.checked)?.value || "u pripremi",
     ownerId: parseInt(localStorage.getItem("userId") || "0"),
     meals: [],
   };
@@ -162,6 +210,7 @@ function submitForm(): void {
       })
       .catch((error) => {
         console.error(error.status, error.text);
+        hideSpinner();
       });
   } else {
     restaurantService
@@ -171,6 +220,7 @@ function submitForm(): void {
       })
       .catch((error) => {
         console.error(error.status, error.text);
+        hideSpinner();
       });
   }
 }
@@ -190,6 +240,7 @@ capacityInput.addEventListener("blur", () => {
 });
 imageURLInput.addEventListener("blur", () => {
   validateImgURL();
+  updateStatusRadios();
   updateSubmitButton();
 });
 latitudeInput.addEventListener("blur", () => {
@@ -204,6 +255,7 @@ longitudeInput.addEventListener("blur", () => {
 submitBtn.addEventListener("click", (event) => {
   event.preventDefault();
   if (updateSubmitButton()) {
+    showSpinner();
     submitForm();
   }
 });
