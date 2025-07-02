@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastronomy tour</title>
+    <link rel="stylesheet" href="../../../../dist/keypoints/pages/keypoints/keypoints.css">
+    <script type="module" src="/dist/keypoints/pages/keypoints/keypoints.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="index.html">Home</a></li>
+            <li class="nav-item"><a href="../../../tours/pages/userTours/userTours.html">My tours</a></li>
+            <li class="nav-item"><a href="../../../tours/pages/tourForm/tourForm.html">Add new tour</a></li>
+            <li class="nav-item"><a href="#">Keypoints</a></li>
+            <li class="nav-item" id="login"><a href="users/pages/login/login.html">Login</a></li>
+            <li class="nav-item" id="logout"><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+    <section class="main">
+        <div class="main-welcome">
+            <h3></h3>
+            
+        </div>
+        <div class="main-options">
+            
+                
+        </div>
+        <div class="main-content">
+            <div class="container">
+                <!-- Left: Keypoint Input Form -->
+                <section class="form-section">
+                    <form id="keypoint-form" novalidate>
+                    <div class="form-group">
+                        <label for="name">Naziv</label>
+                        <input type="text" id="name" name="name" required />
+                        <span class="error-msg" id="name-err"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Opis</label>
+                        <input type="text" id="description" name="description" required />
+                        <span class="error-msg" id="description-err"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url">URL</label>
+                        <input type="url" id="url" name="url" required />
+                        <span class="error-msg" id="url-err"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude">Geografska Duzina</label>
+                        <input type="number" id="longitude" name="longitude" required />
+                        <span class="error-msg" id="longitude-err"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="latitude">Geografska Sirina</label>
+                        <input type="number" id="latitude" name="latitude" required />
+                        <span class="error-msg" id="latitude-err"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Prikaz slike:</label>
+                        <img id="img-preview" src="../../../assets/nopreview.png" alt="Image preview" class="preview-img" />
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="tooltip bottom">
+                            <button type="reset">Reset</button>
+                            <span class="tooltiptext">Reset form</span>
+                        </div>
+                        <div class="tooltip bottom">
+                            <button type="submit" id="submit-btn" disabled>Submit</button>
+                            <span class="tooltiptext">Save keypoint</span>
+                        </div>  
+                    </div>
+
+                    <div class="form-group">
+                    <div id="status-msg" class="status-msg" style="display: none;">
+                        <span id="status-text"></span>
+                        <div class="status-bar"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id="status-msg" class="status-msg" style="display: none;">
+                        <span id="status-text"></span>
+                        <div class="status-bar"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                       <p id="err-msg"> </p>
+                </div>
+                    </form>
+                </section>
+
+                <!-- Right: Keypoint Display Area -->
+                <section class="display-section" id="keypoint-list">
+                    <table>
+                        <thead>
+
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

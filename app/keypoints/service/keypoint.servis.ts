@@ -1,15 +1,20 @@
-import { Tour } from "../model/tour.model.js";
-import { TourResponse } from "../model/tourResponse.model.js";
+import { Tour } from "../../tours/model/tour.model.js";
+import { User } from "../../users/model/user.model.js";
+import { Keypoint } from "../model/keypoint.model.js";
+import { TourService } from "../../tours/service/tour.service.js";
 
-export class TourService {
+const tourService = new TourService();
+
+
+export class KeypointServis {
     private apiUrl: string;
 
     constructor() {
-        this.apiUrl = 'http://localhost:48696/api/tours';
+        this.apiUrl = 'http://localhost:48696/api/key-points';
     }
 
-    getAll(userId: number | null): Promise<TourResponse> {
-        return fetch(`${this.apiUrl}?guideId=${userId}`)
+    getAll(): Promise<Keypoint[]> {
+        return fetch(this.apiUrl)
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(errorMessage => {
@@ -18,31 +23,28 @@ export class TourService {
                 }
                 return response.json();
             })
-            .then((response: TourResponse) => response)
+            .then((response: Keypoint[]) => response)
             .catch(error => {
                 console.error('Error:', error.status);
                 throw error;
             });
     }
+    getByUser(user: User): Promise<Keypoint[]> {
+    return tourService.getById(user.id.toString())
+        .then((tour: Tour) => {
+            if (!tour || !tour.keyPoints) {
+                throw { status: 404, message: "Tour or keypoints not found." };
+            }
+            return tour.keyPoints;
+        })
+        .catch(error => {
+            console.error("Error fetching keypoints for user:", error.message || error);
+            throw error;
+        });
+}
 
-    getById(id: string): Promise<Tour> {
-        return fetch(`${this.apiUrl}/${id}`)
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(errorMessage => {
-                        throw { status: response.status, message: errorMessage };
-                    });
-                }
-                return response.json();
-            })
-            .then((tour: Tour) => tour)
-            .catch(error => {
-                console.error('Error:', error.status);
-                throw error;
-            });
-    }
 
-    addNew(formData: Tour): Promise<Tour> {
+    addNew(formData: Keypoint): Promise<Keypoint> {
         return fetch(this.apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,33 +58,13 @@ export class TourService {
                 }
                 return response.json();
             })
-            .then((tour: Tour) => tour)
+            .then((keypoint: Keypoint) => keypoint)
             .catch(error => {
                 console.error('Error:', error.status);
                 throw error;
             });
     }
 
-    update(id: string, formData: Tour): Promise<Tour> {
-        return fetch(`${this.apiUrl}/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(errorMessage => {
-                        throw { status: response.status, message: errorMessage };
-                    });
-                }
-                return response.json();
-            })
-            .then((tour: Tour) => tour)
-            .catch(error => {
-                console.error('Error:', error.status);
-                throw error;
-            });
-    }
 
     delete(id: string): Promise<void> {
         return fetch(`${this.apiUrl}/${id}`, { method: 'DELETE' })
@@ -112,6 +94,6 @@ export class TourService {
     }
     getName(): string{
         return localStorage.getItem("username") || " Guest"
-    
+  
 }
 }

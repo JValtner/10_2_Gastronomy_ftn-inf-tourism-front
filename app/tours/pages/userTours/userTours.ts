@@ -6,83 +6,83 @@ const tourService = new TourService();
 function renderData(): void {
   const userId = parseInt(localStorage.getItem("userId") || "0");
   tourService.getAll(userId)
-    .then((response: TourResponse) => {   
-      const table = document.querySelector('table tbody');
-      if (!table) {
-        console.error('Table body not found');
+    .then((response: TourResponse) => {
+      const container = document.querySelector('.tour-container');
+      if (!container) {
+        console.error('Tours container not found');
         return;
       }
 
-      table.innerHTML = '';
+      container.innerHTML = ''; 
 
       for (const tour of response.data) {
-        console.log(tour)
-        const newRow = document.createElement('tr');
+        const card = document.createElement('div');
+        card.className = 'tour-card';
 
-        const cell1 = document.createElement('td');
-        cell1.textContent = tour.id?.toString();
-        newRow.appendChild(cell1);
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'tour-title';
 
-        const cell2 = document.createElement('td');
-        cell2.textContent = tour.name;
-        newRow.appendChild(cell2);
+        const h3 = document.createElement('h3');
+        h3.textContent = tour.name;
+        titleDiv.appendChild(h3);
 
-        const cell3 = document.createElement('td');
-        cell3.textContent = tour.description;
-        newRow.appendChild(cell3);
+        const dateP = document.createElement('p');
+        dateP.textContent = `Date: ${formatDate(tour.dateTime)}`;
+        titleDiv.appendChild(dateP);
 
-        const cell4 = document.createElement('td');
-        cell4.textContent = tour.dateTime;
-        newRow.appendChild(cell4);
+        const guestsP = document.createElement('p');
+        guestsP.textContent = `Max guests: ${tour.maxGuests ?? 'N/A'}`;
+        titleDiv.appendChild(guestsP);
 
-        const cell5 = document.createElement('td');
-        cell5.textContent = tour.maxGuests?.toString();
-        newRow.appendChild(cell5);
+        card.appendChild(titleDiv);
 
-        const cell6 = document.createElement('td');
-        cell6.textContent = tour.status?.toString();
-        newRow.appendChild(cell6);
+        const descDiv = document.createElement('div');
+        descDiv.className = 'tour-description';
+        const descP = document.createElement('p');
+        descP.textContent = tour.description;
+        descDiv.appendChild(descP);
+        card.appendChild(descDiv);
 
-        const cell7 = document.createElement('td');
-        cell7.textContent = tour.guide?.username.toString();
-        newRow.appendChild(cell7);
+        const imgDiv = document.createElement('div');
+        imgDiv.className = 'tour-img';
+        const img = document.createElement('img');
+        // You didn't specify image URL in your tour data, so let's assume tour.imageUrl or a placeholder
+        img.src = '../../../assets/nopreview.png';
+        img.alt = tour.name;
+        imgDiv.appendChild(img);
+        card.appendChild(imgDiv);
 
-        const cell8 = document.createElement('td');
-        cell8.textContent = tour.keypoints?.map(k => k.name).join(', ') || 'No keypoints';
-        newRow.appendChild(cell8);
+        
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'tour-actions';
 
-        //Edit Button
-        const cell9 = document.createElement('td');
+        // Edit Button
         const editButton = document.createElement('button');
+        editButton.className = "tour-edit-btn"
         editButton.textContent = 'Edit';
-        editButton.style.width = 'auto';
-
-        const tourId = tour.id;
-        editButton.onclick = function () {
-        window.location.href = `../tourForm/tourForm.html?id=${tourId}`;
+        editButton.onclick = () => {
+          window.location.href = `../tourForm/tourForm.html?id=${tour.id}`;
         };
-        cell9.appendChild(editButton);
-        newRow.appendChild(cell9);
+        actionsDiv.appendChild(editButton);
 
-        //Delete Button
-        const cell10 = document.createElement('td');
+        // Delete Button
         const deleteButton = document.createElement('button');
+        deleteButton.className = "tour-delete-btn";
         deleteButton.textContent = 'Delete';
-        deleteButton.style.width = 'auto';
-
-        deleteButton.onclick = function(){
-        tourService.delete(tourId.toString())
+        deleteButton.onclick = () => {
+          tourService.delete(tour.id.toString())
             .then(() => {
-            newRow.remove(); 
+              card.remove();
             })
             .catch(error => {
-            console.error(error.status, error.text);
+              console.error(error.status, error.text);
             });
         };
-        cell10.appendChild(deleteButton);
-        newRow.appendChild(cell10);
+        actionsDiv.appendChild(deleteButton);
 
-        table.appendChild(newRow);
+        card.appendChild(actionsDiv);
+
+        container.appendChild(card);
       }
     })
     .catch(error => {
@@ -90,7 +90,17 @@ function renderData(): void {
     });
 }
 
+function formatDate(isoDateString: string): string {
+  const date = new Date(isoDateString)
 
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`
+}
 
 window.addEventListener('DOMContentLoaded', () => {
   renderData();

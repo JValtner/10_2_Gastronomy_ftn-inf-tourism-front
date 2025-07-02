@@ -1,0 +1,59 @@
+@import "../../../styles/global";
+@import "../userTours/userTours";
+
+.main-options{
+  #finishTour{
+    &:disabled{
+      background-color: grey;
+      cursor: not-allowed;
+    }
+  }
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 80%;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.display-section {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  flex: 1; // equal width
+  min-width: 0;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background-color: #eaeaea;
+      font-weight: bold;
+
+      th {
+        padding: 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+
+    tbody {
+      td {
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+      }
+    }
+  }
+}
+
+#keypoint-all-list,
+#keypoint-tour-list {
+  background-color: rgba(200, 200, 200, 0.2); // light grey transparent
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); // shadow to bottom right
+}
