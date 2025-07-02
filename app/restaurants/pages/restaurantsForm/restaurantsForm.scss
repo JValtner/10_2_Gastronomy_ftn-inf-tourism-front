@@ -1,7 +1,7 @@
 @import "../../../styles/global.scss";
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Raleway", sans-serif;
   margin: 0;
   padding: 0;
   background-image: url("https://img.freepik.com/free-photo/flat-lay-tasty-local-food-assortment-with-copy-space_23-2148833802.jpg?ga=GA1.1.1171597954.1750573227&semt=ais_hybrid&w=740");
@@ -13,6 +13,7 @@ body {
   flex-direction: column;
 }
 
+// Kontejner za citavu formu
 #restaurant-form-container {
   margin-top: 30px;
   flex: 1;
@@ -58,10 +59,27 @@ body {
     select {
       padding: 10px;
       border-radius: 4px;
-      border: 1px solid #ccc;
+      border: 1px solid green;
       font-size: 14px;
       width: 100%;
       box-sizing: border-box;
+
+      &:invalid {
+        border-color: red;
+      }
+    }
+
+    .meal-info {
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      display: inline-block;
+    }
+    .meal-info.success {
+      background-color: rgba(0, 128, 0, 0.3);
+    }
+    .meal-info.warning {
+      background-color: rgba(255, 166, 0, 0.3);
     }
   }
 
@@ -93,6 +111,111 @@ body {
       transform: translateY(-1px);
       box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
     }
+  }
+}
+
+#loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+
+  &.hidden {
+    display: none;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid green;
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.status-options {
+  display: flex;
+  margin-top: 20px;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-around;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  input {
+    margin-right: 8px;
+    height: 13px;
+    width: 16px;
+  }
+
+  .info-icon {
+    width: 16px;
+    height: 16px;
+    color: #888;
+    cursor: help;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip-text {
+    visibility: hidden;
+    width: 220px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+  }
+
+  .tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
   }
 }
 

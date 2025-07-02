@@ -20,6 +20,10 @@
       </ul>
     </nav>
 
+    <div id="loading-spinner" class="hidden">
+      <div class="spinner"></div>
+    </div>
+
     <div id="meal-form-container">
       <div class="half-image"></div>
 
@@ -29,7 +33,13 @@
         </div>
         <div class="form-row">
           <label for="name">Naziv</label>
-          <input type="text" id="name" name="name" placeholder=" Naziv jela" />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder=" Naziv jela"
+            required
+          />
         </div>
         <span id="name-error" class="error-msg"
           >Ime se mora sastojati bar od 2 karaktera</span
@@ -43,6 +53,7 @@
             rows="4"
             placeholder="Unesite sastojke..."
             maxlength="250"
+            required
           ></textarea>
         </div>
         <span id="ingredients-error" class="error-msg">Polje je obavezno</span>
@@ -55,6 +66,8 @@
             name="price"
             placeholder="Unesite cenu za jelo u eurima"
             min="1"
+            step="any"
+            required
           />
         </div>
         <span id="price-error" class="error-msg">Polje je obavezno</span>
@@ -66,6 +79,7 @@
             id="imageURL"
             name="imageURL"
             placeholder="Stavite URL od slike jela"
+            required
           />
         </div>
         <span id="imageURL-error" class="error-msg">Polje je obavezno</span>

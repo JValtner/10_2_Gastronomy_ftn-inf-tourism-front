@@ -50,8 +50,16 @@ function renderRestaurants(restaurants: Restaurant[]): void {
 
     //Status
     const status = document.createElement("p");
-    status.textContent = restaurant.status;
+    status.textContent = "Status: " + restaurant.status;
     status.className = "restaurant-status";
+    const indicator = document.createElement("span");
+    indicator.classList.add("status-indicator");
+
+    if (restaurant.status === "u pripremi") {
+      indicator.classList.add("status-preparation");
+    } else if (restaurant.status === "objavljeno") {
+      indicator.classList.add("status-published");
+    }
 
     //Akcije div
     const actions = document.createElement("div");
@@ -86,6 +94,7 @@ function renderRestaurants(restaurants: Restaurant[]): void {
         });
     });
 
+    status.appendChild(indicator);
     actions.appendChild(detailsBtn);
     actions.appendChild(editBtn);
     actions.appendChild(deleteBtn);
@@ -99,6 +108,15 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     div.appendChild(card);
   });
 }
+
+window.addEventListener("scroll", () => {
+  const stickyDiv = document.querySelector("#restaurants-title-container");
+  if (window.scrollY > 100) {
+    stickyDiv?.classList.add("scrolled");
+  } else {
+    stickyDiv?.classList.remove("scrolled");
+  }
+});
 
 function getOwnerIdFromUrl() {
   const params = new URLSearchParams(window.location.search);

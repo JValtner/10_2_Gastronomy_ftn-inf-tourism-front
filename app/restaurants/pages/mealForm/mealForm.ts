@@ -56,6 +56,7 @@ function validatePrice(): boolean {
     return false;
   }
   priceError.style.visibility = "hidden";
+  return true;
 }
 
 function validateImgURL(): boolean {
@@ -80,6 +81,17 @@ function updateSubmitButton(): boolean {
   return valid;
 }
 
+// Spineri
+function showSpinner(): void {
+  const spinner = document.getElementById("loading-spinner");
+  if (spinner) spinner.classList.remove("hidden");
+}
+
+function hideSpinner(): void {
+  const spinner = document.getElementById("loading-spinner");
+  if (spinner) spinner.classList.add("hidden");
+}
+
 // Submit forme
 function submitForm(restaurantId: string): void {
   const formData: Meal = {
@@ -98,6 +110,7 @@ function submitForm(restaurantId: string): void {
     })
     .catch((error) => {
       console.error(error.status, error.text);
+      hideSpinner();
     });
 }
 
@@ -110,6 +123,7 @@ submitBtn.addEventListener("click", (event) => {
   event.preventDefault();
   const rId = getRestaurantIdFromQuery();
   if (rId && updateSubmitButton()) {
+    showSpinner();
     submitForm(rId);
   }
 });
