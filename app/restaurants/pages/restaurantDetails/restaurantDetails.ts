@@ -1,4 +1,3 @@
-//import { Meal } from "../../model/meal.model.js";
 import { Meal } from "../../model/meal.model.js";
 import { Restaurant } from "../../model/restaurant.model.js";
 import { RestaurantService } from "../../service/restaurant.service.js";
