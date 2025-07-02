@@ -18,9 +18,9 @@ const ingredientsError = document.getElementById(
   "ingredients-error"
 ) as HTMLSpanElement;
 const priceError = document.getElementById("price-error") as HTMLSpanElement;
-const imageURLError = document.getElementById(
+/*const imageURLError = document.getElementById(
   "imageURL-error"
-) as HTMLSpanElement;
+) as HTMLSpanElement;*/
 
 submitBtn.disabled = true;
 
@@ -40,7 +40,6 @@ function validateName(): boolean {
 function validateIngredients(): boolean {
   const value = ingredientsInput.value.trim();
   if (value.length === 0 || value.length > 250) {
-    ingredientsError.textContent = "Polje mora imati između 1 i 250 karaktera";
     ingredientsError.style.visibility = "visible";
     return false;
   }
@@ -51,7 +50,7 @@ function validateIngredients(): boolean {
 function validatePrice(): boolean {
   const value = priceInput.value.trim();
   const parsed = parseFloat(value);
-  if (parsed < 0) {
+  if (value === "" || isNaN(parsed) || parsed < 0) {
     priceError.style.visibility = "visible";
     return false;
   }
@@ -59,7 +58,7 @@ function validatePrice(): boolean {
   return true;
 }
 
-function validateImgURL(): boolean {
+/*function validateImgURL(): boolean {
   const value = imageURLInput.value.trim();
   if (value === "") {
     imageURLError.style.visibility = "visible";
@@ -68,15 +67,12 @@ function validateImgURL(): boolean {
     imageURLError.style.visibility = "hidden";
     return true;
   }
-}
+}*/
 
 // Ukljuci/Iskljuci submit dugme
 function updateSubmitButton(): boolean {
-  const valid =
-    validateName() &&
-    validateIngredients() &&
-    validatePrice() &&
-    validateImgURL();
+  const valid = validateName() && validateIngredients() && validatePrice(); //&&
+  //validateImgURL();
   submitBtn.disabled = !valid;
   return valid;
 }
