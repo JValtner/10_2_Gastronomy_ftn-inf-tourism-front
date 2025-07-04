@@ -3,7 +3,7 @@ export interface Meal {
   order: number;
   name: string;
   price: number;
-  Ingredients: string;
-  imgURL?: string;
+  ingredients: string;
+  imageUrl?: string;
   restaurantId: number;
 }

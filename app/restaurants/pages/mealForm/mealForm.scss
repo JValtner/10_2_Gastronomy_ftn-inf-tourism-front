@@ -13,8 +13,7 @@ body {
   flex-direction: column;
 }
 
-// Kontejner za citavu formu
-#restaurant-form-container {
+#meal-form-container {
   margin-top: 30px;
   flex: 1;
   display: flex;
@@ -30,12 +29,12 @@ body {
 
 .half-image {
   width: 50%;
-  background-image: url("https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?cs=srgb&dl=pexels-life-of-pix-67468.jpg&fm=jpg");
+  background-image: url("https://miss7.24sata.hr/media/img/58/c2/1edd976a71e5ecd671e4.jpeg");
   background-size: cover;
   background-position: center;
 }
 
-#restaurant-form {
+#meal-form {
   width: 50%;
   padding: 40px 50px;
   display: flex;
@@ -67,19 +66,6 @@ body {
       &:invalid {
         border-color: red;
       }
-    }
-
-    .meal-info {
-      padding: 10px;
-      border-radius: 6px;
-      text-align: center;
-      display: inline-block;
-    }
-    .meal-info.success {
-      background-color: rgba(0, 128, 0, 0.3);
-    }
-    .meal-info.warning {
-      background-color: rgba(255, 166, 0, 0.3);
     }
   }
 
@@ -114,6 +100,7 @@ body {
   }
 }
 
+// Spiner
 #loading-spinner {
   position: fixed;
   top: 50%;
@@ -147,91 +134,19 @@ body {
   }
 }
 
-.status-options {
-  display: flex;
-  margin-top: 20px;
-  gap: 20px;
-  align-items: center;
-  justify-content: space-around;
-
-  label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-  }
-
-  input {
-    margin-right: 8px;
-    height: 13px;
-    width: 16px;
-  }
-
-  .info-icon {
-    width: 16px;
-    height: 16px;
-    color: #888;
-    cursor: help;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #333;
-    }
-  }
-
-  .tooltip {
-    position: relative;
-    display: inline-block;
-  }
-
-  .tooltip-text {
-    visibility: hidden;
-    width: 220px;
-    background-color: #333;
-    color: #fff;
-    text-align: left;
-    border-radius: 6px;
-    padding: 8px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 12px;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 6px;
-      border-style: solid;
-      border-color: #333 transparent transparent transparent;
-    }
-  }
-
-  .tooltip:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-  }
-}
-
 @media (max-width: 768px) {
-  #restaurant-form-container {
+  #meal-form-container {
     flex-direction: column;
     height: auto;
     width: 90vw;
   }
 
   .half-image,
-  #restaurant-form {
+  #meal-form {
     width: 100%;
   }
 
-  #restaurant-form {
+  #meal-form {
     padding: 20px;
   }
 

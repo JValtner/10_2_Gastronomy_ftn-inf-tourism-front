@@ -10,6 +10,6 @@ export interface Tour{
     status?: string;
     guide?: User;
     guideId: number;
-    keypoints?: Keypoint[];
+    keyPoints?: Keypoint[];
 }
 

@@ -18,6 +18,10 @@
       </ul>
     </nav>
 
+    <div id="loading-spinner" class="hidden">
+      <div class="spinner"></div>
+    </div>
+
     <div id="restaurant-form-container">
       <div class="half-image"></div>
 
@@ -32,6 +36,7 @@
             id="name"
             name="name"
             placeholder=" Naziv vaseg restorana"
+            required
           />
         </div>
         <span id="name-error" class="error-msg"
@@ -46,6 +51,7 @@
             rows="4"
             placeholder="Unesite opis..."
             maxlength="250"
+            required
           ></textarea>
         </div>
         <span id="description-error" class="error-msg">Polje je obavezno</span>
@@ -58,6 +64,7 @@
             name="capacity"
             placeholder="Unesite maksimalan broj gostiju"
             min="1"
+            required
           />
         </div>
         <span id="capacity-error" class="error-msg">Polje je obavezno</span>
@@ -69,6 +76,7 @@
             id="imageURL"
             name="imageURL"
             placeholder="Stavite URL od slike vaseg restorana"
+            required
           />
         </div>
         <span id="imageURL-error" class="error-msg">Polje je obavezno</span>
@@ -80,6 +88,8 @@
             id="latitude"
             name="latitude"
             placeholder="Geografska sirina"
+            step="any"
+            required
           />
         </div>
         <span id="latitude-error" class="error-msg">Polje je obavezno</span>
@@ -91,16 +101,51 @@
             id="longitude"
             name="longitude"
             placeholder="Geografska duzina"
+            step="any"
+            required
           />
         </div>
         <span id="longitude-error" class="error-msg">Polje je obavezno</span>
 
         <div class="form-row">
-          <label for="status">Status restorana:</label>
-          <select name="status" id="status">
-            <option value="u pripremi">U pripremi</option>
-            <option value="objavljeno">Objavljeno</option>
-          </select>
+          <p id="meals-count" class="meal-info"></p>
+        </div>
+
+        <div class="form-row">
+          <label>Status restorana:</label>
+          <div class="status-options">
+            <label>
+              <input type="radio" name="status" value="u pripremi" checked />
+              U pripremi
+            </label>
+
+            <label class="disabled-option">
+              <input type="radio" name="status" value="objavljeno" disabled />
+              Objavljeno
+              <span class="tooltip">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="info-icon"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <circle cx="12" cy="8" r="1" />
+                </svg>
+                <span class="tooltip-text">
+                  Restoran mora imati bar 5 jela i jednu sliku da bi mogao biti
+                  objavljen.
+                </span>
+              </span>
+            </label>
+          </div>
         </div>
         <span id="status-error" class="error-msg"></span>
 
