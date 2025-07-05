@@ -1,26 +1,16 @@
+import { AuthService } from "../../../users/service/auth.service.js";
 import { TourResponse } from "../../model/tourResponse.model.js";
 import { TourService } from "../../service/tour.service.js";
 
 const tourService = new TourService();
-const userJSON = localStorage.getItem("user");
-const user = JSON.parse(userJSON)
+const authService = new AuthService();
 
 function renderData(): void {
-<<<<<<< HEAD
-  
-  tourService.getAll(user.id)
-    .then((response: TourResponse) => {   
-      const table = document.querySelector('table tbody');
-      if (!table) {
-        console.error('Table body not found');
-=======
-  const userId = parseInt(localStorage.getItem("userId") || "0");
-  tourService.getAll(userId)
+  tourService.getAll(authService.getUserId())
     .then((response: TourResponse) => {
       const container = document.querySelector('.tour-container');
       if (!container) {
         console.error('Tours container not found');
->>>>>>> master
         return;
       }
 
@@ -101,14 +91,6 @@ function renderData(): void {
     });
 }
 
-<<<<<<< HEAD
-const logout = document.querySelector('#logout') as HTMLAnchorElement;
-logout.addEventListener("click", ()=>{
-  localStorage.removeItem("user");
-  window.location.href = "../../../users/pages/login/login.html";
-
-})
-=======
 function formatDate(isoDateString: string): string {
   const date = new Date(isoDateString)
 
@@ -120,9 +102,11 @@ function formatDate(isoDateString: string): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}`
 }
->>>>>>> master
 
 window.addEventListener('DOMContentLoaded', () => {
+  //Login/logout
+  authService.loginHandler();
+  //data loading
   renderData();
-  tourService.getwelcome() 
+  tourService.getwelcome();
 });

@@ -1,13 +1,14 @@
 import { Tour } from "../model/tour.model.js";
 import { TourResponse } from "../model/tourResponse.model.js";
 
+
 export class TourService {
     private apiUrl: string;
 
     constructor() {
         this.apiUrl = 'http://localhost:48696/api/tours';
     }
-
+    
     getAll(userId: number | null): Promise<TourResponse> {
         return fetch(`${this.apiUrl}?guideId=${userId}`)
             .then(response => {
@@ -111,14 +112,7 @@ export class TourService {
   username.textContent = "Dobrodosao: " + this.getName()
     }
     getName(): string{
-<<<<<<< HEAD
-        const userJSON = localStorage.getItem("user");
-        const user = JSON.parse(userJSON)
-        return user.username || " Guest"
-  
-=======
         return localStorage.getItem("username") || " Guest"
     
->>>>>>> master
 }
 }

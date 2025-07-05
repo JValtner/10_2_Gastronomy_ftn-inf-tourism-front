@@ -1,7 +1,9 @@
+import { AuthService } from "../../../users/service/auth.service.js"
 import { Tour } from "../../model/tour.model.js"
 import { TourService } from "../../service/tour.service.js"
 
-const tourService = new TourService()
+const tourService = new TourService();
+const authService = new AuthService();
 
 function initializeForm(): void {
     const queryString = window.location.search
@@ -101,19 +103,6 @@ action
 
 }
 
-<<<<<<< HEAD
-const logout = document.querySelector('#logout') as HTMLAnchorElement;
-logout.addEventListener("click", ()=>{
-  localStorage.removeItem("user");
-  window.location.href = "../../../users/pages/login/login.html";
-
-})
-
-document.addEventListener('DOMContentLoaded', ()=>{
-    initializeForm();
-=======
-
-
 //tolltips
 function attachTooltipTimeouts() {
     document.querySelectorAll('.tooltip').forEach(tooltip => {
@@ -145,9 +134,9 @@ const fieldArray: string[] = ['name', 'description', 'datetime', 'maxGuests', 's
 const fieldValid: { [key: string]: boolean } = {
     name: false,
     description: false,
-    url: false,
-    longitude: false,
-    latitude: false
+    datetime: false,
+    maxGuests: false,
+    status: false
 }
 
 function validate(id: string): void {
@@ -202,8 +191,9 @@ function validateForm(): void {
 
 //DOM Loaded
 window.addEventListener("DOMContentLoaded", () => {
+    //Login/logout
+    authService.loginHandler();
     initializeForm()
->>>>>>> master
     tourService.getwelcome()
     attachTooltipTimeouts()
 
