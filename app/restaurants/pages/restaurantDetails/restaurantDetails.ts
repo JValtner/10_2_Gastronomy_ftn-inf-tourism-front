@@ -89,16 +89,6 @@ function renderRestaurant(restaurant: Restaurant): void {
     indicator.classList.add("status-published");
   }
 
-  //Latituda
-  //const latitude = document.createElement("p");
-  //latitude.textContent =restaurant.latitude.toString();
-  //latitude.className = "restaurant-location";
-
-  //Longituda
-  //const longitude = document.createElement("p");
-  //longitude.textContent = restaurant.longitude.toString();
-  //longitude.className = "restaurant-location";
-
   //Slika
   const image = document.createElement("img");
   image.src = restaurant.imageUrl;
@@ -111,8 +101,6 @@ function renderRestaurant(restaurant: Restaurant): void {
   restaurantDetails.appendChild(capacity);
   restaurantDetails.appendChild(location);
   restaurantDetails.appendChild(status);
-  //restaurantDetails.appendChild(latitude);
-  //restaurantDetails.appendChild(longitude);
   restaurantPhotos.appendChild(image);
 }
 

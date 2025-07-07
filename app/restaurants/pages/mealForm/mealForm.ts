@@ -18,9 +18,9 @@ const ingredientsError = document.getElementById(
   "ingredients-error"
 ) as HTMLSpanElement;
 const priceError = document.getElementById("price-error") as HTMLSpanElement;
-/*const imageURLError = document.getElementById(
+const imageURLError = document.getElementById(
   "imageURL-error"
-) as HTMLSpanElement;*/
+) as HTMLSpanElement;
 
 submitBtn.disabled = true;
 
@@ -33,46 +33,99 @@ function getRestaurantIdFromQuery(): string | null {
 // Validacije
 function validateName(): boolean {
   const value = nameInput.value.trim();
-  nameError.style.visibility = value.length < 2 ? "visible" : "hidden";
-  return value.length >= 2;
+  if (value.length < 2) {
+    nameError.textContent = "Ime mora imati najmanje 2 karaktera";
+    nameError.classList.add("visible");
+    nameInput.classList.add("input-error");
+    nameInput.classList.remove("input-valid");
+    return false;
+  } else {
+    nameError.classList.remove("visible");
+    nameInput.classList.remove("input-error");
+    nameInput.classList.add("input-valid");
+    return true;
+  }
 }
 
 function validateIngredients(): boolean {
   const value = ingredientsInput.value.trim();
-  if (value.length === 0 || value.length > 250) {
-    ingredientsError.style.visibility = "visible";
+  if (value.length === 0) {
+    ingredientsError.textContent =
+      "Odeljak sa sastojcima mora imati izmedju 1 i 250 karaktera";
+    ingredientsError.classList.add("visible");
+    ingredientsInput.classList.add("input-error");
     return false;
+  } else {
+    ingredientsError.classList.remove("visible");
+    ingredientsInput.classList.remove("input-error");
+    ingredientsInput.classList.add("input-valid");
+    return true;
   }
-  ingredientsError.style.visibility = "hidden";
-  return true;
 }
 
 function validatePrice(): boolean {
   const value = priceInput.value.trim();
   const parsed = parseFloat(value);
-  if (value === "" || isNaN(parsed) || parsed < 0) {
-    priceError.style.visibility = "visible";
+  if (value === "" || isNaN(parsed)) {
+    priceError.textContent = "Polje je obavezno";
+    priceError.classList.add("visible");
+    priceInput.classList.add("input-error");
     return false;
   }
-  priceError.style.visibility = "hidden";
-  return true;
-}
-
-/*function validateImgURL(): boolean {
-  const value = imageURLInput.value.trim();
-  if (value === "") {
-    imageURLError.style.visibility = "visible";
+  if (parsed <= 0) {
+    priceError.textContent = "Cena ne moze biti 0 ili manje od 0";
+    priceError.classList.add("visible");
+    priceInput.classList.add("input-error");
     return false;
   } else {
-    imageURLError.style.visibility = "hidden";
+    priceError.classList.remove("visible");
+    priceInput.classList.remove("input-error");
+    priceInput.classList.add("input-valid");
     return true;
   }
-}*/
+}
+
+function validateImgURL(): boolean {
+  const value = imageURLInput.value.trim();
+  const imageExtensions = /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i;
+
+  if (value === "") {
+    imageURLError.textContent = "URL slike je obavezno polje";
+    imageURLError.classList.add("visible");
+    imageURLInput.classList.add("input-error");
+    imageURLInput.classList.remove("input-valid");
+    return false;
+  }
+
+  if (!imageURLInput.validity.valid) {
+    imageURLError.textContent = "Unesite validan URL";
+    imageURLError.classList.add("visible");
+    imageURLInput.classList.add("input-error");
+    imageURLInput.classList.remove("input-valid");
+    return false;
+  }
+
+  if (!imageExtensions.test(value)) {
+    imageURLError.textContent = "URL mora biti slika (jpg, png, gif, webp...)";
+    imageURLError.classList.add("visible");
+    imageURLInput.classList.add("input-error");
+    imageURLInput.classList.remove("input-valid");
+    return false;
+  } else {
+    imageURLError.classList.remove("visible");
+    imageURLInput.classList.remove("input-error");
+    imageURLInput.classList.add("input-valid");
+    return true;
+  }
+}
 
 // Ukljuci/Iskljuci submit dugme
 function updateSubmitButton(): boolean {
-  const valid = validateName() && validateIngredients() && validatePrice(); //&&
-  //validateImgURL();
+  const valid =
+    validateName() &&
+    validateIngredients() &&
+    validatePrice() &&
+    validateImgURL();
   submitBtn.disabled = !valid;
   return valid;
 }
