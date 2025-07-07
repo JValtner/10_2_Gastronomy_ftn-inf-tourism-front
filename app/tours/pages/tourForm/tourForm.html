@@ -1,93 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gastronomy tour</title>
-    <link rel="stylesheet" href="../../../../dist/tours/pages/tourForm/tourForm.css">
-    <script type="module" src="/dist/tours/pages/tourForm/tourForm.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gastronomy tour</title>
+  <link rel="stylesheet" href="../../../../dist/tours/pages/tourForm/tourForm.css" />
+  <script type="module" src="/dist/tours/pages/tourForm/tourForm.js"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <ul class="nav-list">
-            <li class="nav-item"><a href="index.html">Home</a></li>
-            <li class="nav-item" id="login"><a href="users/pages/login/login.html">Login</a></li>
-            <li class="nav-item" id="logout"><a href="index.html">Logout</a></li>
-        </ul>
-    </nav>
-    <section class="main">
-        <div class="main-welcome">
-            <h3></h3>
-            
-        </div>
-        <div class="main-options">
-     
-        </div>
-        <div class="main-content">
-            <div class="form-container">
-            <form id="form-data">
-                <div class="form-row">
-                    <label for="name">Name: </label>
-                    <input id="name" type="text" name="name" required>
-                </div>
-                <div class="form-row">
-                    <label for="description">Description: </label>
-                    <textarea id="description" name="description" cols="50" rows="10" required></textarea>
-                </div>
-                <div class="form-row">
-                    <label for="datetime">Date and Time: </label>
-                    <input id="datetime" 
-                    type="datetime-local"
-                    name="meeting-time"
-                    value="2025-01-01T19:30"
-                    min="2025-01-01T19:30"
-                    max="2030-001-01T00:00" required>
-                </div>
-                <div class="form-row">
-                    <label for="maxGuests">Max Guests: </label>
-                    <input id="maxGuests" type="number" name="maxGuests" required>
-                </div>
-                <div class="form-row">
-                    <label for="status">Status: </label>
-                    <select name="status" id="status">
-                        <option value="u pripremi">U pripremi</option>
-                        <option value="objavljena">Objavljena</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <!--Hidden field for User id--> 
-                    <input id="guideId" type="hidden" name="guideId"> 
-                </div>
-                <div class="form-row">
-                    <label for="guide">Guide: </label>
-                    <input id="guide" type="text" name="guide" required> 
-                </div>
-                <div class="form-row">
-                    <label for="keypoints">Keypoints: </label>
-                    <select name="keypoints" id="keypoints">
-                        <option value="Keypoint1<">Keypoint1</option>
-                        <option value="Keypoint2<">Keypoint2</option>
-                        <option value="...">...</option>
-                    </select>
-                </div>
-                
-                <div class="form-row-Btn">
-                    <button type="reset" id="form-reset-Btn">Resetuj formu</button>
-                    <button type="submit" id="form-submit-Btn" >Unesi podatke</button>
-                </div>
-                <div class="form-row">
-                    <p id="error-msg"></p>
-                </div>
-            </form>
-        </div>
-        </div>
+  <nav class="navbar">
+    <ul class="nav-list">
+      <li class="nav-item"><a href="index.html">Home</a></li>
+      <li class="nav-item"><a href="../userTours/userTours.html">My tours</a></li>
+      <li class="nav-item"><a href="../tourForm/tourForm.html">Add new tour</a></li>
+      <li class="nav-item"><a href="../../../keypoints/pages/keypoints/keypoints.html">Keypoints</a></li>
+      <li class="nav-item" id="login"><a href="users/pages/login/login.html" class="disabled">Login</a></li>
+      <li class="nav-item" id="logout"><a href="index.html" class="disabled">Logout</a></li>
+    </ul>
+  </nav>
 
-    </section>
+  <section class="main">
+    <div class="main-welcome">
+      <h3></h3>
+    </div>
 
-    
+    <div class="main-content">
+      <div class="form-container">
+        <div class="form-entry">
+          <form id="form-data">
+            <div class="form-row">
+              <label for="name">Name: </label>
+              <input id="name" type="text" name="name" required />
+              <span class="error-msg" id="name-err"></span>
+            </div>
+            <div class="form-row">
+              <label for="description">Description: </label>
+              <textarea id="description" name="description" cols="50" rows="10" required></textarea>
+              <span class="error-msg" id="description-err"></span>
+            </div>
+            <div class="form-row">
+              <label for="datetime">Date and Time: </label>
+              <input id="datetime" type="datetime-local" name="meeting-time" required />
+              <span class="error-msg" id="datetime-err"></span>
+            </div>
+            <div class="form-row">
+              <label for="maxGuests">Max Guests: </label>
+              <input id="maxGuests" type="number" name="maxGuests" required />
+              <span class="error-msg" id="maxGuests-err"></span>
+            </div>
+            <div class="form-row">
+              <label for="status">Status: </label>
+              <select name="status" id="status" required>
+                <option value="">-- Odaberite status --</option>
+                <option value="u pripremi">U pripremi</option>
+                <option value="objavljena">Objavljena</option>
+              </select>
+              <span class="error-msg" id="status-err"></span>
+            </div>
+
+            <div class="form-row-Btn">
+              <div class="tooltip bottom">
+                <button type="reset" id="form-reset-Btn">Resetuj formu</button>
+                <span class="tooltiptext">Reset form</span>
+              </div>
+              <div class="tooltip bottom">
+                <button type="submit" id="form-submit-Btn" disabled>Unesi podatke</button>
+                <span class="tooltiptext">Save tour</span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div id="status-msg" class="status-msg" style="display: none;">
+                <span id="status-text"></span>
+                <div class="status-bar"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <p id="error-msg"></p>
+            </div>
+          </form>
+        </div>
+        <div class="form-decoration"></div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
-
-
-
-        

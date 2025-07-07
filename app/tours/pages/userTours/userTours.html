@@ -1,53 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gastronomy tour</title>
-    <link rel="stylesheet" href="../../../../dist/tours/pages/userTours/userTours.css">
-    <script type="module" src="/dist/tours/pages/userTours/userTours.js"></script>
-</head>
-<body>
-    <nav class="navbar">
-        <ul class="nav-list">
-            <li class="nav-item"><a href="index.html">Home</a></li>
-            <li class="nav-item" id="login"><a href="users/pages/login/login.html">Login</a></li>
-            <li class="nav-item" id="logout"><a href="index.html">Logout</a></li>
-        </ul>
-    </nav>
-    <section class="main">
-        <div class="main-welcome">
-            <h3></h3>
-            
-        </div>
-        <div class="main-options">
-            <button id="addNewTour" onclick="window.location.href='../tourForm/tourForm.html'" >Add new tour</button>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gastronomy tour</title>
+        <link rel="stylesheet" href="../../../../dist/tours/pages/userTours/userTours.css">
+        <script type="module" src="/dist/tours/pages/userTours/userTours.js"></script>
+    </head>
+    <body>
+        <nav class="navbar">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="index.html">Home</a></li>
+                <li class="nav-item"><a href="#">My tours</a></li>
+                <li class="nav-item"><a href="../tourForm/tourForm.html">Add new tour</a></li>
+                <li class="nav-item"><a href="../../../keypoints/pages/keypoints/keypoints.html">Keypoints</a></li>
+                <li class="nav-item" id="login"><a href="users/pages/login/login.html" class="disabled">Login</a></li>
+                <li class="nav-item" id="logout"><a href="index.html" class="disabled">Logout</a></li>
+            </ul>
+        </nav>
+        <section class="main">
+            <div class="main-welcome">
+                <h3></h3>
                 
-        </div>
-        <div class="main-content">
-            <table class="tourlist">
-                <thead>
-                    <tr>
-                        <th>Tour Id</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Max guests</th>
-                        <th>Status</th>
-                        <th>Guide</th>
-                        <th>Keypoints</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
-
-    </section>
-
-</body>
+            </div>
+            <div class="main-options">
+                <div class="tooltip left">
+                    <button id="addNewTour" onclick="window.location.href='../tourForm/tourForm.html'" >Add new tour</button>    
+                    <span class="tooltiptext">Add new tour</span>
+                </div> 
+                
+                    
+            </div>
+            <div class="main-content">
+                <div class="tour-container">
+                    
+                </div>  
+            </div>
+        </section>
+    </body>
 </html>

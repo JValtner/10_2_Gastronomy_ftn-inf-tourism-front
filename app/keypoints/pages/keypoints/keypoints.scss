@@ -240,86 +240,72 @@ button {
       width: 100%;
     }
   }
-  .tour-container{
-      
-      .tour-card {
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.form-section {
+  flex: 1;
+  max-width: 450px;
+
+  .form-group {
+    margin-bottom: 1.2rem;
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+
+      &:invalid {
+        border-color: red;
+      }
+    }
+
+    .error-msg {
+      display: block;
+      color: red;
+      font-size: 0.85rem;
+      height: 1.2em; // maintain space even if no error
+    }
+  }
+
+  .preview-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+  }
+
+  .form-actions {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+    margin-top: 1.5rem;
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .tour-title {
-      flex: 1;
-      margin-right: 1rem;
-
-      h3 {
-        margin: 0;
-        font-size: 1.25rem;
-        color: #333;
-      }
-
-      p {
-        margin: 0.25rem 0 0;
-        color: #666;
-        font-size: 0.9rem;
-      }
-    }
-
-    .tour-description {
-      flex: 2;
-      color: #555;
-      font-size: 1rem;
-      margin-right: 1rem;
-    }
-
-    .tour-img {
-      width: 120px;
-      height: 80px;
-      overflow: hidden;
-      border-radius: 5px;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-    }
-    .tour-actions{
-      padding:10px;
-      margin-left: auto;
-      margin-right: auto;
-
-      button{
-        display:block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 80px;
-        margin:5px;
-      }
-      .tour-edit-btn{
-          background-color: rgb(244, 244, 115);
-          color: black;
-          &:hover {
-            background-color: rgb(249, 249, 80);
-          }
-        }
-      .tour-delete-btn{
-          background-color: rgb(246, 140, 140);
-          color: black;
-          &:hover {
-            background-color: rgb(248, 82, 82);
-          } 
+    button {
+      padding: 0.5rem 1rem;
+      &:disabled{
+        background-color: grey;
+        cursor: not-allowed;
       }
     }
   }
+}
+
+.display-section {
+  flex: 1;
+  background-color: #f7f7f7;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  min-height: 300px;
 }
