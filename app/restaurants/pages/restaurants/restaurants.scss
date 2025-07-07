@@ -4,7 +4,7 @@ body {
   font-family: "Raleway", sans-serif;
   margin: 0;
   padding: 0;
-  background-image: url("https://images.pexels.com/photos/1640773/pexels-photo-1640773.jpeg?cs=srgb&dl=pexels-ella-olsson-572949-1640773.jpg&fm=jpg");
+  //background-image: url("https://www.webolution.rs/cengygli/2019/07/webolution-wallpaper-5.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -43,6 +43,7 @@ body {
   padding: 40px;
   background-color: rgba(255, 255, 255, 0.9);
   transition: all 0.6s ease-in-out;
+  box-sizing: border-box;
 
   &.scrolled {
     position: fixed;
@@ -62,63 +63,94 @@ body {
 
 #restaurants-container {
   display: flex;
-  flex-direction: space-evenly;
+  justify-content: space-evenly;
   justify-content: center;
   flex-wrap: wrap;
   padding: 40px;
   gap: 50px;
+  background-color: whitesmoke;
 
   .restaurant-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between; // Rasporedi sadržaj da dugmad budu dole
-    min-width: 450px;
-    max-width: 450px;
-    min-height: 290px;
-    max-height: 1000px;
+    width: 100%;
+    max-width: 250px;
+    height: 380px; // fiksna visina
+    overflow: hidden;
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &.status-preparation {
+      border: 5px solid orange;
+    }
+
+    &.status-published {
+      border: 5px solid green;
+    }
 
     .restaurant-image {
-      min-width: 100%;
-      min-height: 400px;
-      box-sizing: border-box;
-      object-fit: cover;
+      width: 100%;
+      max-height: 170px;
+      object-fit: cover; // ili scale-down ako ti više odgovara
       border-radius: 6px;
-      margin-bottom: 10px;
     }
 
     .restaurant-info {
-      min-width: 400px;
-    }
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
 
-    .status-indicator {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-left: 12px;
-      border-radius: 50%;
-      vertical-align: text-top;
-    }
+      .restaurant-name {
+        font-weight: bold;
+        font-size: 24px;
+      }
 
-    .status-preparation {
-      background-color: rgb(255, 166, 0);
-    }
+      .restaurant-description {
+        max-height: 50px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-    .status-published {
-      background-color: green;
+      p {
+        font-size: 14px;
+        margin: 0;
+        overflow: hidden;
+      }
     }
 
     .restaurants-actions {
       height: 40px;
+      width: 100%;
+      box-sizing: border-box;
       display: flex;
-      justify-content: space-evenly;
-      align-items: flex-end;
-      padding: 5px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
       padding-top: 10px;
+
+      button {
+        width: 90px;
+      }
 
       #deleteBtn {
         background-color: $warn-color;
@@ -136,5 +168,39 @@ body {
         }
       }
     }
+  }
+}
+
+@media (max-width: 600px) {
+  #restaurants-title-container {
+    height: 30px;
+
+    h1 {
+      height: 30px;
+      padding: 0;
+      margin: 0;
+      font-size: 20px;
+    }
+
+    button {
+    }
+  }
+  .restaurant-card {
+    max-width: 90vw;
+    height: auto;
+  }
+
+  .restaurant-image {
+    max-height: 120px;
+  }
+
+  .restaurant-info p,
+  h2 {
+    font-size: 13px;
+  }
+
+  .restaurant-button {
+    font-size: 14px;
+    padding: 8px 12px;
   }
 }

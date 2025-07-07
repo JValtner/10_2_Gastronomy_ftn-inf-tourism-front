@@ -89,6 +89,18 @@ function renderRestaurant(restaurant: Restaurant): void {
     indicator.classList.add("status-published");
   }
 
+  //Rezervacije
+  const resBtnHolder = document.createElement("div");
+  resBtnHolder.id = "resBtnHolder";
+
+  const resBtn = document.createElement("button");
+  resBtn.classList.add("restaurant-button");
+  resBtn.id = "resBtn";
+  resBtn.textContent = "Rezervisi";
+  resBtn.addEventListener("click", function () {
+    window.location.href = "";
+  });
+
   //Slika
   const image = document.createElement("img");
   image.src = restaurant.imageUrl;
@@ -96,11 +108,13 @@ function renderRestaurant(restaurant: Restaurant): void {
 
   //Apends
   status.appendChild(indicator);
+  resBtnHolder.appendChild(resBtn);
   restaurantDetails.appendChild(name);
   restaurantDetails.appendChild(description);
   restaurantDetails.appendChild(capacity);
   restaurantDetails.appendChild(location);
   restaurantDetails.appendChild(status);
+  restaurantDetails.appendChild(resBtnHolder);
   restaurantPhotos.appendChild(image);
 }
 
@@ -136,7 +150,7 @@ function renderMeals(restaurant: Restaurant): void {
 
     //Cena
     const price = document.createElement("p");
-    price.textContent = "Cena: " + meal.price.toString() + " EUR";
+    price.textContent = meal.price.toString() + " EUR";
     price.className = "meal-price";
 
     //Akcije div

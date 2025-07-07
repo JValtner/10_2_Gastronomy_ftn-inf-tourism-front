@@ -5,11 +5,14 @@ body {
   font-size: 20px;
   margin: 0;
   padding: 0;
-  background-image: url("https://images.pexels.com/photos/616401/pexels-photo-616401.jpeg");
+  background-color: whitesmoke;
+  //background-image: url("https://images.pexels.com/photos/616401/pexels-photo-616401.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .restaurant-button {
@@ -42,7 +45,7 @@ body {
   justify-content: space-around;
   align-items: center;
   padding: 40px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: white;
   transition: all 0.6s ease-in-out;
 
   &.scrolled {
@@ -70,11 +73,11 @@ body {
   flex-direction: row;
   justify-content: space-evenly;
   align-items: flex-start;
-  background-color: rgba(255, 255, 255, 0.9);
   overflow-wrap: break-word;
   word-wrap: break-word;
   white-space: normal;
   overflow: hidden;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
 
   #restaurant-details-text {
     width: 50%;
@@ -127,6 +130,16 @@ body {
     .status-published {
       background-color: green;
     }
+
+    #resBtnHolder {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 20px;
+
+      #resBtn {
+        width: 30%;
+      }
+    }
   }
 
   #restaurant-details-photos {
@@ -147,47 +160,78 @@ body {
 
 #meals-container {
   display: flex;
-  flex-direction: space-evenly;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   padding: 40px;
   gap: 50px;
+  background-color: whitesmoke;
 
   .meal-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between; // Rasporedi sadržaj da dugmad budu dole
-    min-width: 450px;
-    max-width: 450px;
-    min-height: 290px;
-    max-height: 1000px;
+    width: 100%;
+    max-width: 250px;
+    height: 380px; // fiksna visina
+    overflow: hidden;
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
     .meal-image {
-      min-width: 100%;
-      min-height: 400px;
-      box-sizing: border-box;
-      object-fit: cover;
+      width: 100%;
+      max-height: 170px;
+      object-fit: cover; // ili scale-down ako ti više odgovara
       border-radius: 6px;
-      margin-bottom: 10px;
     }
 
     .meal-info {
-      min-width: 400px;
+      height: 330px;
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
     }
 
     .meal-name {
-      font-size: 30px;
+      max-height: 50px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .meal-ingredients {
+      margin: 0;
+      min-height: 70px;
+      max-height: 70px;
+      font-size: 14px;
+    }
+
+    .meal-price {
+      text-align: center;
+      padding-top: 6px;
+      margin: 0;
+      max-height: 30px;
+      min-height: 30px;
+      width: 80px;
+      font-size: 15px;
+      background-color: steelblue;
+      color: white;
+      text-shadow: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
     }
 
     .meal-actions {
       height: 30px;
       display: flex;
-      justify-content: space-evenly;
+      justify-content: flex-end;
       align-items: flex-end;
       padding: 5px;
       padding-top: 10px;
@@ -208,5 +252,123 @@ body {
         box-shadow: 0 4px 6px rgba(217, 83, 79, 0.3); // crvena sa 30% providnosti
       }
     }
+  }
+}
+
+@media (max-width: 600px) {
+  #restaurants-title-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 0;
+
+    h1 {
+      padding: 0;
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .restaurant-title-buttons {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      overflow: hidden;
+
+      button {
+        padding: 3px;
+        width: 72px;
+        height: 30px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  #restaurant-details-container {
+    flex-direction: column-reverse;
+    width: 95%;
+    height: auto;
+    margin: 20px auto;
+
+    #restaurant-details-photos {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+
+      .restaurant-image {
+        width: 90%;
+        height: 90%;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        object-fit: fill;
+      }
+    }
+  }
+
+  #restaurant-details-text {
+    width: 100% !important;
+    padding: 20px;
+
+    .restaurant-name {
+      font-size: 28px;
+      margin-left: 0;
+      text-align: center;
+    }
+
+    .restaurant-description {
+      font-size: 18px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .restaurant-capacity,
+    .restaurant-location {
+      font-size: 16px;
+      margin-left: 0;
+      text-align: center;
+    }
+
+    .restaurant-status {
+      align-self: center;
+    }
+
+    #resBtnHolder {
+      display: flex;
+      justify-content: center !important;
+      align-items: center !important;
+      padding: 10px;
+
+      #resBtn {
+        height: 40px;
+        width: 80% !important;
+      }
+    }
+  }
+
+  #meals-container {
+    padding: 20px 10px;
+    gap: 20px;
+  }
+
+  .meal-card {
+    width: 100%;
+    max-width: 90vw;
+  }
+
+  .meal-image {
+    max-height: 120px;
+  }
+
+  .meal-info p {
+    font-size: 13px;
+  }
+
+  .restaurant-button {
+    font-size: 14px;
+    padding: 8px 12px;
   }
 }

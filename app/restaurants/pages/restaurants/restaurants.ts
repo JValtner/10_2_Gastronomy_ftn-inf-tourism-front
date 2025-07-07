@@ -24,6 +24,12 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     const card = document.createElement("div");
     card.className = "restaurant-card";
 
+    // Kartica je dugme
+    card.dataset.id = restaurant.id.toString();
+    card.addEventListener("click", function () {
+      window.location.href = `../restaurantDetails/restaurantDetails.html?id=${restaurant.id}`;
+    });
+
     //Info div
     const info = document.createElement("div");
     info.className = "restaurant-info";
@@ -40,7 +46,7 @@ function renderRestaurants(restaurants: Restaurant[]): void {
 
     //Opis
     const description = document.createElement("p");
-    description.textContent = "Opis: " + restaurant.description;
+    description.textContent = restaurant.description;
     description.className = "restaurant-description";
 
     //Kapacitet
@@ -49,33 +55,21 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     capacity.className = "restaurant-capacity";
 
     //Status
-    const status = document.createElement("p");
-    status.textContent = "Status: " + restaurant.status;
-    status.className = "restaurant-status";
-    const indicator = document.createElement("span");
-    indicator.classList.add("status-indicator");
-
     if (restaurant.status === "u pripremi") {
-      indicator.classList.add("status-preparation");
+      card.classList.add("status-preparation");
     } else if (restaurant.status === "objavljeno") {
-      indicator.classList.add("status-published");
+      card.classList.add("status-published");
     }
 
     //Akcije div
     const actions = document.createElement("div");
     actions.className = "restaurants-actions";
 
-    const detailsBtn = document.createElement("button");
-    detailsBtn.textContent = "Detalji";
-    detailsBtn.className = "restaurant-button";
-    detailsBtn.addEventListener("click", function () {
-      window.location.href = `../restaurantDetails/restaurantDetails.html?id=${restaurant.id}`;
-    });
-
     const editBtn = document.createElement("button");
     editBtn.textContent = "Izmeni";
     editBtn.className = "restaurant-button";
-    editBtn.addEventListener("click", function () {
+    editBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
       window.location.href = `../restaurantsForm/restaurantsForm.html?id=${restaurant.id}`;
     });
 
@@ -83,7 +77,8 @@ function renderRestaurants(restaurants: Restaurant[]): void {
     deleteBtn.textContent = "Obrisi";
     deleteBtn.className = "restaurant-button";
     deleteBtn.id = "deleteBtn";
-    deleteBtn.addEventListener("click", function () {
+    deleteBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
       restaurantService
         .delete(restaurant.id.toString())
         .then(() => {
@@ -94,14 +89,11 @@ function renderRestaurants(restaurants: Restaurant[]): void {
         });
     });
 
-    status.appendChild(indicator);
-    actions.appendChild(detailsBtn);
     actions.appendChild(editBtn);
     actions.appendChild(deleteBtn);
     info.appendChild(name);
     info.appendChild(description);
     info.appendChild(capacity);
-    info.appendChild(status);
     card.appendChild(image);
     card.appendChild(info);
     card.appendChild(actions);
