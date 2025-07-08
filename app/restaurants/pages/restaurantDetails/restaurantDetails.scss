@@ -133,8 +133,10 @@ body {
 
     #resBtnHolder {
       display: flex;
-      justify-content: flex-end;
-      padding-right: 20px;
+      flex-direction: column; // stavi kolone, da ide vertikalno
+      justify-content: flex-end; // spusti na dno
+      align-items: flex-end; // opcionalno, ako želiš da bude desno
+      height: 100%;
 
       #resBtn {
         width: 30%;
