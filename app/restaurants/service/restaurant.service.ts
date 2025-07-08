@@ -31,6 +31,23 @@ export class RestaurantService {
       });
   }
 
+  getPaged(page = 1, pageSize = 6, orderBy = "Name", orderDirection = "ASC") {
+    const url = `${this.apiURL}?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderDirection=${orderDirection}`;
+    return fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((message) => {
+            throw { status: response.status, message };
+          });
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error(`Error:`, error.status, error.message);
+        throw error;
+      });
+  }
+
   getById(restaurantId: string): Promise<Restaurant> {
     return fetch(`${this.apiURL}/${restaurantId}`)
       .then((response) => {
