@@ -28,7 +28,7 @@ const descriptionError = document.getElementById(
 const capacityError = document.getElementById(
   "capacity-error"
 ) as HTMLSpanElement;
-const imageURError = document.getElementById(
+const imageURLError = document.getElementById(
   "imageURL-error"
 ) as HTMLSpanElement;
 const latitudeError = document.getElementById(
@@ -75,10 +75,15 @@ function fillForm(restaurantId: string): void {
 function validateName(): boolean {
   const value = nameInput.value.trim();
   if (value.length < 2) {
-    nameError.style.visibility = "visible";
+    nameError.textContent = "Ime mora imati najmanje 2 karaktera";
+    nameError.classList.add("visible");
+    nameInput.classList.add("input-error");
+    nameInput.classList.remove("input-valid");
     return false;
   } else {
-    nameError.style.visibility = "hidden";
+    nameError.classList.remove("visible");
+    nameInput.classList.remove("input-error");
+    nameInput.classList.add("input-valid");
     return true;
   }
 }
@@ -87,10 +92,13 @@ function validateDescription(): boolean {
   const value = descriptionInput.value.trim();
   if (value.length === 0 || value.length > 250) {
     descriptionError.textContent = "Opis mora imati izmedju 1 i 250 karaktera";
-    descriptionError.style.visibility = "visible";
+    descriptionError.classList.add("visible");
+    descriptionInput.classList.add("input-error");
     return false;
   } else {
-    descriptionError.style.visibility = "hidden";
+    descriptionError.classList.remove("visible");
+    descriptionInput.classList.remove("input-error");
+    descriptionInput.classList.add("input-valid");
     return true;
   }
 }
@@ -98,33 +106,73 @@ function validateDescription(): boolean {
 function validateCapacity(): boolean {
   const value = capacityInput.value.trim();
   const parsed = parseInt(value);
-  if (isNaN(parsed) || parsed <= 0) {
-    capacityError.style.visibility = "visible";
+  if (isNaN(parsed)) {
+    capacityError.textContent = "Kapacitet restorana je obavezno polje";
+    capacityError.classList.add("visible");
+    capacityInput.classList.add("input-error");
+    capacityInput.classList.remove("input-valid");
     return false;
+  }
+
+  if (parsed <= 0) {
+    capacityError.textContent = "Kapacitet restorana ne moze biti 0";
+    capacityError.classList.add("visible");
+    capacityInput.classList.add("input-error");
+    capacityInput.classList.remove("input-valid");
   } else {
-    capacityError.style.visibility = "hidden";
+    capacityError.classList.remove("visible");
+    capacityInput.classList.remove("input-error");
+    capacityInput.classList.add("input-valid");
     return true;
   }
 }
 
 function validateImgURL(): boolean {
   const value = imageURLInput.value.trim();
+  const imageExtensions = /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i;
+
   if (value === "") {
-    imageURError.style.visibility = "visible";
+    imageURLError.textContent = "URL slike je obavezno polje";
+    imageURLError.classList.add("visible");
+    imageURLInput.classList.add("input-error");
+    imageURLInput.classList.remove("input-valid");
     return false;
-  } else {
-    imageURError.style.visibility = "hidden";
-    return true;
   }
+
+  if (!imageURLInput.validity.valid) {
+    imageURLError.textContent = "Unesite validan URL";
+    imageURLError.classList.add("visible");
+    imageURLInput.classList.add("input-error");
+    imageURLInput.classList.remove("input-valid");
+    return false;
+  }
+
+  if (!imageExtensions.test(value)) {
+    imageURLError.textContent = "URL mora biti slika (jpg, png, gif, webp...)";
+    imageURLError.classList.add("visible");
+    imageURLInput.classList.add("input-error");
+    imageURLInput.classList.remove("input-valid");
+    return false;
+  }
+
+  imageURLError.classList.remove("visible");
+  imageURLInput.classList.remove("input-error");
+  imageURLInput.classList.add("input-valid");
+  return true;
 }
 
 function validateLatitude(): boolean {
   const value = latitudeInput.value.trim();
   if (value === "") {
-    latitudeError.style.visibility = "visible";
+    latitudeError.textContent = "Geografska sirina je obavezno polje";
+    latitudeError.classList.add("visible");
+    latitudeInput.classList.add("input-error");
+    latitudeInput.classList.remove("input-valid");
     return false;
   } else {
-    latitudeError.style.visibility = "hidden";
+    latitudeError.classList.remove("visible");
+    latitudeInput.classList.remove("input-error");
+    latitudeInput.classList.add("input-valid");
     return true;
   }
 }
@@ -132,10 +180,15 @@ function validateLatitude(): boolean {
 function validateLongitude(): boolean {
   const value = longitudeInput.value.trim();
   if (value === "") {
-    longitudeError.style.visibility = "visible";
+    longitudeError.textContent = "Geografska duzina je obavezno polje";
+    longitudeError.classList.add("visible");
+    longitudeInput.classList.add("input-error");
+    longitudeInput.classList.remove("input-valid");
     return false;
   } else {
-    longitudeError.style.visibility = "hidden";
+    longitudeError.classList.remove("visible");
+    longitudeInput.classList.remove("input-error");
+    longitudeInput.classList.add("input-valid");
     return true;
   }
 }

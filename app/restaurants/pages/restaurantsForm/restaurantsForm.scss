@@ -4,7 +4,7 @@ body {
   font-family: "Raleway", sans-serif;
   margin: 0;
   padding: 0;
-  background-image: url("https://img.freepik.com/free-photo/flat-lay-tasty-local-food-assortment-with-copy-space_23-2148833802.jpg?ga=GA1.1.1171597954.1750573227&semt=ais_hybrid&w=740");
+  background-color: #333;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -19,9 +19,9 @@ body {
   flex: 1;
   display: flex;
   width: 90vw;
-  max-width: 1200px;
-  height: calc(100vh - 60px); // cela visina ekrana minus navbar
-  background-color: rgba(255, 255, 255, 0.85); // providna pozadina za container
+  max-width: 1500px;
+  height: 100%;
+  background-color: whitesmoke;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -44,6 +44,7 @@ body {
   overflow-y: auto;
 
   .form-row {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -59,14 +60,21 @@ body {
     select {
       padding: 10px;
       border-radius: 4px;
-      border: 1px solid green;
+      border: 2px solid white;
+      transition: border-color 0.3s ease;
       font-size: 14px;
       width: 100%;
       box-sizing: border-box;
+    }
 
-      &:invalid {
-        border-color: red;
-      }
+    input.input-error,
+    textarea.input-error {
+      border-color: red;
+    }
+
+    input.input-valid,
+    textarea.input-valid {
+      border-color: green;
     }
 
     .meal-info {
@@ -84,10 +92,19 @@ body {
   }
 
   .error-msg {
+    height: 10px;
+    padding-left: 5px;
     visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     color: $warn-color;
     font-size: 12px;
     margin-left: 0;
+  }
+
+  .error-msg.visible {
+    opacity: 1;
+    visibility: visible;
   }
 
   .restaurant-button {
@@ -159,6 +176,7 @@ body {
     align-items: center;
     gap: 10px;
     font-size: 14px;
+    padding-left: 10px;
   }
 
   input {
@@ -219,29 +237,88 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
+  body {
+    background-color: #333;
+  }
+
   #restaurant-form-container {
+    background-color: whitesmoke;
     flex-direction: column;
-    height: auto;
-    width: 90vw;
+    width: 95%;
+
+    .half-image {
+      display: none;
+    }
+
+    #restaurant-form {
+      width: 100%;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-y: unset;
+
+      .form-row {
+        width: 100%;
+        padding: 0;
+
+        h1 {
+          font-size: 24px;
+          text-align: center;
+        }
+
+        label {
+          padding-left: 5px;
+          height: 20px;
+          display: none;
+        }
+
+        .status-options {
+          align-self: center;
+          width: 300px;
+          input {
+            height: 100px;
+          }
+          label {
+            display: contents;
+          }
+        }
+
+        button {
+          width: 90%;
+          align-self: center;
+        }
+
+        input::placeholder {
+          font-size: 14px;
+          color: #555; // ili neka tvoja topla/profesionalna boja
+          opacity: 1; // da bude vidljiv
+        }
+
+        input {
+          height: 70px;
+
+          &::placeholder {
+            font-size: 14px;
+            transform: scale(0.95); // opcionalno "manje"
+          }
+        }
+      }
+    }
   }
 
-  .half-image,
-  #restaurant-form {
-    width: 100%;
-  }
+  .tooltip-text {
+    left: 10%;
+    right: auto;
+    transform: translateY(-50%);
+    max-width: 200px;
+    word-break: break-word;
 
-  #restaurant-form {
-    padding: 20px;
-  }
-
-  input,
-  textarea,
-  select {
-    width: 10vh;
-  }
-
-  .form-row {
-    width: 280px;
+    &::after {
+      top: 50%;
+      right: 100%; // strelica je sa desne strane tooltipa
+      transform: translateY(-50%);
+    }
   }
 }
