@@ -4,9 +4,12 @@ import { RestaurantService } from "../../service/restaurant.service.js";
 
 const restaurantService = new RestaurantService();
 
+const isOwner = localStorage.getItem("role") === "vlasnik";
+const ownerId = isOwner ? localStorage.getItem("userId") : null;
+
 // Dugmad na vrhu stranica
 // Dodaj novo jelo
-const addMealBtn = document.querySelector("#addMealBtn");
+const addMealBtn = document.querySelector("#addMealBtn") as HTMLButtonElement;
 addMealBtn.addEventListener("click", function () {
   const restaurantId = getRestaurantIdFromUrl();
   if (!restaurantId) {
@@ -17,7 +20,9 @@ addMealBtn.addEventListener("click", function () {
 });
 
 // Izmeni restoran
-const changeRestaurantBtn = document.querySelector("#changeRestaurant");
+const changeRestaurantBtn = document.querySelector(
+  "#changeRestaurant"
+) as HTMLButtonElement;
 changeRestaurantBtn.addEventListener("click", function () {
   const restaurantId = getRestaurantIdFromUrl();
   if (!restaurantId) {
@@ -28,11 +33,22 @@ changeRestaurantBtn.addEventListener("click", function () {
 });
 
 // Tvoji restorani
-const yourRestaurantsBtn = document.querySelector("#yourRestaurants");
+const yourRestaurantsBtn = document.querySelector(
+  "#yourRestaurants"
+) as HTMLButtonElement;
 yourRestaurantsBtn.addEventListener("click", function () {
   const ownerId = localStorage.getItem("userId");
   window.location.href = `../restaurants/restaurants.html?ownerId=${ownerId}`;
 });
+
+const allBtns = [addMealBtn, changeRestaurantBtn, yourRestaurantsBtn];
+if (!isOwner) {
+  allBtns.forEach((btn) => {
+    if (btn) {
+      btn.style.display = "none";
+    }
+  });
+}
 
 function getRestaurantIdFromUrl(): string | null {
   const params = new URLSearchParams(window.location.search);
@@ -55,16 +71,19 @@ function renderRestaurant(restaurant: Restaurant): void {
   const name = document.createElement("p");
   name.textContent = restaurant.name;
   name.className = "restaurant-name";
+  restaurantDetails.appendChild(name);
 
   //Opis restorana
   const description = document.createElement("p");
   description.textContent = restaurant.description;
   description.className = "restaurant-description";
+  restaurantDetails.appendChild(description);
 
   //Kapacitet
   const capacity = document.createElement("p");
   capacity.textContent = "Kapacitet: " + restaurant.capacity + " mesta";
   capacity.className = "restaurant-capacity";
+  restaurantDetails.appendChild(capacity);
 
   //Location
   const location = document.createElement("p");
@@ -74,32 +93,42 @@ function renderRestaurant(restaurant: Restaurant): void {
     " - " +
     restaurant.longitude.toString();
   location.className = "restaurant-location";
+  restaurantDetails.appendChild(location);
 
   //Status
   const status = document.createElement("p");
-  status.className = "restaurant-status";
-  status.textContent = "Status: " + restaurant.status;
+  if (ownerId) {
+    status.className = "restaurant-status";
+    status.textContent = "Status: " + restaurant.status;
 
-  const indicator = document.createElement("span");
-  indicator.classList.add("status-indicator");
+    const indicator = document.createElement("span");
+    indicator.classList.add("status-indicator");
 
-  if (restaurant.status === "u pripremi") {
-    indicator.classList.add("status-preparation");
-  } else if (restaurant.status === "objavljeno") {
-    indicator.classList.add("status-published");
+    if (restaurant.status === "u pripremi") {
+      indicator.classList.add("status-preparation");
+    } else if (restaurant.status === "objavljeno") {
+      indicator.classList.add("status-published");
+    }
+    status.appendChild(indicator);
+    restaurantDetails.appendChild(status);
+  } else {
+    status.style.display = "none";
   }
 
   //Rezervacije
   const resBtnHolder = document.createElement("div");
-  resBtnHolder.id = "resBtnHolder";
+  if (!ownerId) {
+    resBtnHolder.id = "resBtnHolder";
 
-  const resBtn = document.createElement("button");
-  resBtn.classList.add("restaurant-button");
-  resBtn.id = "resBtn";
-  resBtn.textContent = "Rezervisi";
-  resBtn.addEventListener("click", function () {
-    window.location.href = "";
-  });
+    const resBtn = document.createElement("button");
+    resBtn.classList.add("restaurant-button");
+    resBtn.id = "resBtn";
+    resBtn.textContent = "Rezervisi";
+    resBtn.addEventListener("click", function () {
+      window.location.href = "";
+    });
+    resBtnHolder.appendChild(resBtn);
+  }
 
   //Slika
   const image = document.createElement("img");
@@ -107,13 +136,6 @@ function renderRestaurant(restaurant: Restaurant): void {
   image.className = "restaurant-image";
 
   //Apends
-  status.appendChild(indicator);
-  resBtnHolder.appendChild(resBtn);
-  restaurantDetails.appendChild(name);
-  restaurantDetails.appendChild(description);
-  restaurantDetails.appendChild(capacity);
-  restaurantDetails.appendChild(location);
-  restaurantDetails.appendChild(status);
   restaurantDetails.appendChild(resBtnHolder);
   restaurantPhotos.appendChild(image);
 }
@@ -142,40 +164,42 @@ function renderMeals(restaurant: Restaurant): void {
     const name = document.createElement("p");
     name.textContent = meal.name;
     name.className = "meal-name";
+    info.appendChild(name);
 
     //Sastojci
     const ingredients = document.createElement("p");
     ingredients.textContent = "Sastojci: " + meal.ingredients;
     ingredients.className = "meal-ingredients";
+    info.appendChild(ingredients);
 
     //Cena
     const price = document.createElement("p");
     price.textContent = meal.price.toString() + " EUR";
     price.className = "meal-price";
+    info.appendChild(price);
 
     //Akcije div
     const actions = document.createElement("div");
     actions.className = "meal-actions";
 
     const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Obrisi";
-    deleteBtn.className = "restaurant-button";
-    deleteBtn.id = "deleteBtn";
-    deleteBtn.addEventListener("click", function () {
-      restaurantService
-        .deleteMeal(restaurant.id.toString(), meal.id.toString())
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error.status, error.text);
-        });
-    });
+    if (ownerId) {
+      deleteBtn.textContent = "Obrisi";
+      deleteBtn.className = "restaurant-button";
+      deleteBtn.id = "deleteBtn";
+      deleteBtn.addEventListener("click", function () {
+        restaurantService
+          .deleteMeal(restaurant.id.toString(), meal.id.toString())
+          .then(() => {
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error(error.status, error.text);
+          });
+      });
+      actions.append(deleteBtn);
+    }
 
-    info.appendChild(name);
-    info.appendChild(ingredients);
-    info.appendChild(price);
-    actions.append(deleteBtn);
     card.appendChild(image);
     card.appendChild(info);
     card.appendChild(actions);

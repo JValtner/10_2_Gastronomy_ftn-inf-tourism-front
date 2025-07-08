@@ -38,7 +38,7 @@ body {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 40px;
   background-color: rgba(255, 255, 255, 0.9);
@@ -55,9 +55,67 @@ body {
 
   h1 {
     font-size: 40px;
-    padding-left: 100px;
     padding-bottom: 10px;
     padding-top: 10px;
+  }
+
+  #sorter-container {
+    width: 50%;
+    display: flex;
+    flex-shrink: 2;
+    justify-content: space-evenly;
+    #restaurant-page-container,
+    #restaurant-sort-container {
+      width: 50%;
+
+      label {
+        color: #333;
+        font-size: 20px;
+        align-items: center;
+      }
+
+      select {
+        width: 100px;
+        height: 28px;
+      }
+    }
+  }
+}
+
+.pagination-button {
+  padding: 6px 12px;
+  margin: 4px;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.active-page {
+  background-color: #ffa500 !important; // npr. narandžasta kao "Glovo"
+  color: white;
+  font-weight: bold;
+  border-color: #ffa500;
+}
+
+#pagination-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+  button {
+    background-color: white;
+    color: #333;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
@@ -173,16 +231,42 @@ body {
 
 @media (max-width: 600px) {
   #restaurants-title-container {
+    width: 90vw;
     height: 30px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    box-sizing: border-box;
+    margin-bottom: 25px;
 
     h1 {
-      height: 30px;
-      padding: 0;
-      margin: 0;
-      font-size: 20px;
+      display: none;
     }
 
     button {
+    }
+
+    #sorter-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      gap: 20px;
+      #restaurant-page-container,
+      #restaurant-sort-container {
+        width: 50%;
+        display: flex;
+
+        label {
+          color: #333;
+          font-size: 20px;
+          align-items: center;
+        }
+
+        select {
+          width: 100px;
+          height: 25px;
+        }
+      }
     }
   }
   .restaurant-card {
