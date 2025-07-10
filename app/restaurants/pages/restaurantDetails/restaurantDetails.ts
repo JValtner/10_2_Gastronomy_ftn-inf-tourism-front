@@ -124,8 +124,9 @@ function renderRestaurant(restaurant: Restaurant): void {
     resBtn.classList.add("restaurant-button");
     resBtn.id = "resBtn";
     resBtn.textContent = "Rezervisi";
+    const restaurantId = getRestaurantIdFromUrl();
     resBtn.addEventListener("click", function () {
-      window.location.href = "";
+      window.location.href = `../../../restaurantReservations/pages/restaurantReservationsForm/restaurantReservationsForm.html?id=${restaurantId}`;
     });
     resBtnHolder.appendChild(resBtn);
   }

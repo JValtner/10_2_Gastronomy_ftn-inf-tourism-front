@@ -1,0 +1,218 @@
+@import "../../../styles/global.scss";
+
+body {
+  font-family: "Raleway", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.navbar {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+
+    .nav-item {
+      a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: $button-color;
+        }
+      }
+    }
+  }
+}
+
+.restaurant-button {
+  background-color: $button-color;
+  width: 90px;
+  height: 48px;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: darken($button-color, 10%);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.5);
+    transform: translateY(-3px);
+    cursor: pointer;
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+  }
+}
+
+#reservations-title-container {
+  height: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: all 0.6s ease-in-out;
+  box-sizing: border-box;
+
+  &.scrolled {
+    position: fixed;
+    top: 0px;
+    height: 40px;
+    width: 100%;
+    padding: 0.5rem 1rem;
+  }
+
+  h1 {
+    font-size: 40px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+}
+
+#reservations-container {
+  display: flex;
+  justify-content: space-evenly;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 40px;
+  gap: 50px;
+  background-color: whitesmoke;
+
+  .reservation-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // Rasporedi sadržaj da dugmad budu dole
+    width: 100%;
+    max-width: 250px;
+    height: 380px; // fiksna visina
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .restaurant-info {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 20px;
+
+      .reservation-restaurant-name {
+        font-weight: bold;
+        font-size: 24px;
+        margin: 0;
+        color: #333;
+      }
+
+      .reservation-date-time {
+        font-size: 16px;
+        margin: 5px 0;
+        color: #666;
+      }
+
+      .reservation-guest-number {
+        font-size: 14px;
+        margin: 5px 0;
+        color: #888;
+      }
+
+      p {
+        font-size: 14px;
+        margin: 0;
+        overflow: hidden;
+      }
+    }
+
+    .restaurants-actions {
+      height: 40px;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      padding-top: 10px;
+
+      button {
+        width: 90px;
+        margin: 0 5px;
+      }
+
+      #cancelBtn {
+        background-color: $warn-color;
+
+        &:hover {
+          background-color: darken($warn-color, 10%);
+          box-shadow: 0 6px 12px rgba(217, 83, 79, 0.5);
+          transform: translateY(-3px);
+          cursor: pointer;
+        }
+
+        &:active {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(217, 83, 79, 0.3);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  #reservations-title-container {
+    width: 90vw;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    box-sizing: border-box;
+    margin-bottom: 25px;
+
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  .reservation-card {
+    max-width: 90vw;
+    height: auto;
+    min-height: 180px;
+  }
+
+  .restaurant-info {
+    .reservation-restaurant-name {
+      font-size: 20px;
+    }
+
+    .reservation-date-time,
+    .reservation-guest-number {
+      font-size: 12px;
+    }
+  }
+
+  .restaurant-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rezervisi</title>
+    <link
+      rel="stylesheet"
+      href="../../../../dist/restaurantReservations/pages/restaurantReservationsForm/restaurantReservationsForm.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="../../../restaurants/pages/restaurants/restaurants.html"
+            >Restorani</a
+          >
+          <a href="">Rezervacije</a>
+        </li>
+        <li class="nav-item"><a href="../../../index.html">Home</a></li>
+        <li class="nav-item" id="login">
+          <!--<li class="nav-item" id="login">
+          <a href="../../../users/pages/login/login.html">Login</a>
+        </li> -->
+        </li>
+
+        <li class="nav-item" id="logout">
+          <a href="../../../index.html" class="disabled">Logout</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="loading-spinner" class="hidden">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="restaurant-reservation-form-container">
+      <div class="half-image"></div>
+
+      <form id="restaurant-form">
+        <div class="form-row">
+          <h1 id="new-reservation-title">Rezerviši</h1>
+        </div>
+
+        <div class="form-row">
+          <label for="reservation-date">Izaberi datum kada dolaziš</label>
+          <input
+            type="date"
+            id="reservation-date"
+            name="reservation-date"
+            required
+          />
+          <span id="reservation-date-error" class="error-msg"></span>
+        </div>
+
+        <div class="form-row">
+          <p>Izaberi obrok:</p>
+          <div>
+            <input
+              type="radio"
+              id="meal-breakfast"
+              name="meal-type"
+              value="dorucak"
+              required
+            />
+            <label for="meal-breakfast">Doručak (8:00)</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="meal-lunch"
+              name="meal-type"
+              value="rucak"
+            />
+            <label for="meal-lunch">Ručak (13:00)</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="meal-dinner"
+              name="meal-type"
+              value="vecera"
+            />
+            <label for="meal-dinner">Večera (18:00)</label>
+          </div>
+          <span id="meal-type-error" class="error-msg"></span>
+        </div>
+
+        <div class="form-row">
+          <label for="guest-count">Broj osoba</label>
+          <input
+            type="number"
+            id="guest-count"
+            name="guest-count"
+            placeholder="Unesite broj osoba"
+            min="1"
+            required
+          />
+          <span id="guest-count-error" class="error-msg"></span>
+        </div>
+
+        <div class="form-row">
+          <button type="submit" id="submitBtn" class="restaurant-button">
+            Rezerviši
+          </button>
+        </div>
+      </form>
+    </div>
+    <script
+      type="module"
+      src="../../../../dist/restaurantReservations/pages/restaurantReservationsForm/restaurantReservationsForm.js"
+    ></script>
+  </body>
+</html>

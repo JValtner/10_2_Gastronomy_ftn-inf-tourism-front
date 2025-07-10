@@ -1,18 +1,15 @@
+import { Restaurant } from "../../restaurants/model/restaurant.model.js";
+import { User } from "../../users/model/user.model.js";
+
 export interface RestaurantReservation {
-  id?: number;
-  restaurantId: number;
-  userId: number;
-  reservationDate: Date;
+  id?: string;
+  restaurantId: string;
+  userId: string;
+  reservationDate: string;
   mealType: "dorucak" | "rucak" | "vecera";
   numberOfGuests: number;
   status: "pending" | "confirmed" | "cancelled";
-  createdAt?: Date;
-  restaurant?: {
-    id: number;
-    name: string;
-  };
-  user?: {
-    id: number;
-    username: string;
-  };
+  createdAt?: string;
+  restaurant?: Restaurant;
+  user?: User;
 }

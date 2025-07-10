@@ -15,8 +15,11 @@ export class RestaurantReservationService {
         }
         return response.json();
       })
+      .then((reservations) => {
+        return reservations;
+      })
       .catch((error) => {
-        console.error(`Error:`, error.status);
+        console.error(`Service Error:`, error);
         throw error;
       });
   }

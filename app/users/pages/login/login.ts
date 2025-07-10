@@ -16,8 +16,7 @@ function setUserLoginState(isLoggedIn: boolean) {
 }
 
 function handleLogin(event: Event) {
-
-event.preventDefault();
+  event.preventDefault();
   const form = document.querySelector("form") as HTMLFormElement;
   const formData = new FormData(form);
   const username = formData.get("username") as string;
@@ -34,9 +33,8 @@ event.preventDefault();
         window.location.href = `../../../restaurants/pages/restaurants/restaurants.html?ownerId=${user.id}`;
       } else if (user.role === "vodic") {
         window.location.href = `../../../tours/pages/userTours/userTours.html?ownerId=${user.id}`;
-        
       } else if (user.role === "turista") {
-        window.location.href = "";
+        window.location.href = "../../../index.html";
       } else {
         window.location.href = "/login.html";
       }
