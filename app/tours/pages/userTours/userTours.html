@@ -10,12 +10,12 @@
     <body>
         <nav class="navbar">
             <ul class="nav-list">
-                <li class="nav-item"><a href="index.html">Home</a></li>
+                <li class="nav-item"><a href="../../../index.html">Home</a></li>
                 <li class="nav-item"><a href="#">My tours</a></li>
                 <li class="nav-item"><a href="../tourForm/tourForm.html">Add new tour</a></li>
                 <li class="nav-item"><a href="../../../keypoints/pages/keypoints/keypoints.html">Keypoints</a></li>
-                <li class="nav-item" id="login"><a href="users/pages/login/login.html" class="disabled">Login</a></li>
-                <li class="nav-item" id="logout"><a href="index.html" class="disabled">Logout</a></li>
+                <li class="nav-item" id="login"><a href="users/pages/login/login.html">Login</a></li>
+                <li class="nav-item" id="logout"><a href="../../../index.html">Logout</a></li>
             </ul>
         </nav>
         <section class="main">
@@ -32,7 +32,41 @@
                     
             </div>
             <div class="main-content">
+                <div id="pagination-bar">
+                    <div class="Nav-paged">
+                        <hr>
+                        <div class="pagination-center">
+                            <nav class="pagination">
+                                <button id="prev-page" class="page-btn">«</button>
+                                <span id="current-page">1</span> / <span id="total-pages">1</span>
+                                <button id="next-page" class="page-btn">»</button>
+                            </nav>
+                            </div>
+                            <div class="pagination-controls">
+                            <label for="page-size">Tura po strani:</label>
+                            <select id="page-size">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                            </select>
+
+                            <label for="sort-by">Sortiraj prema :</label>
+                            <select id="sort-by">
+                                <option value="Name">Nazivu</option>
+                                <option value="DateTime" selected>Datumu</option>
+                                <option value="MaxGuests">Broju Mesta</option>
+                            </select>
+                            <label for="order-by">Prikaz:</label>
+                            <select id="order-by">
+                                <option value="desc">Opadajucem</option>
+                                <option value="asc" selected>Rastucem</option>
+                            </select>
+                        </div>
+                        <hr>
+                    </div> 
+                </div>
                 <div class="tour-container">
+                    
                     
                 </div>  
             </div>

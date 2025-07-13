@@ -41,7 +41,24 @@ export class KeypointServis {
             console.error("Error fetching keypoints for user:", error.message || error);
             throw error;
         });
-}
+    }
+
+    getById(id: string): Promise<Keypoint> {
+        return fetch(`${this.apiUrl}/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorMessage => {
+                        throw { status: response.status, message: errorMessage };
+                    });
+                }
+                return response.json();
+            })
+            .then((keypoint: Keypoint) => keypoint)
+            .catch(error => {
+                console.error('Error:', error.status);
+                throw error;
+            });
+    }
 
 
     addNew(formData: Keypoint): Promise<Keypoint> {

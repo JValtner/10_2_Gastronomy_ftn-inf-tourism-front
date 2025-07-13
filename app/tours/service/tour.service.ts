@@ -24,6 +24,37 @@ export class TourService {
                 throw error;
             });
     }
+    getPaged(
+    guideId: number | null = 0,
+    page: number | null = 1,
+    pageSize: number | null = 10,
+    orderBy: string | null = "Name",
+    orderDirection: string | null = "ASC"
+    ): Promise<TourResponse> {
+    const params = new URLSearchParams()
+
+    if (guideId !== null) params.append("guideId", guideId.toString())
+    if (page !== null) params.append("page", page.toString())
+    if (pageSize !== null) params.append("pageSize", pageSize.toString())
+    if (orderBy) params.append("orderBy", orderBy)
+    if (orderDirection) params.append("orderDirection", orderDirection)
+
+    return fetch(`${this.apiUrl}?${params.toString()}`)
+        .then(response => {
+        if (!response.ok) {
+            return response.text().then(errorMessage => {
+            throw { status: response.status, message: errorMessage }
+            })
+        }
+        return response.json()
+        })
+        .then((response: TourResponse) => response)
+        .catch(error => {
+        console.error("Error:", error.status)
+        throw error
+        })
+    }
+
 
     getById(id: string): Promise<Tour> {
         return fetch(`${this.apiUrl}/${id}`)

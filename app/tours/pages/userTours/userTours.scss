@@ -25,7 +25,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;   
-  height: 70vh;
+  //height: 70vh;
   
   .main-welcome,
   .main-options,
@@ -242,7 +242,7 @@ button {
   }
   .tour-container{
       
-      .tour-card {
+    .tour-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -254,7 +254,10 @@ button {
     transition: box-shadow 0.3s ease;
 
     &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* deeper shadow */
+      transform: scale(1.02); /* slight zoom effect */
+      cursor: pointer;        /* shows pointer */
+      transition: all 0.2s ease-in-out; /* smooth transition */
     }
 
     .tour-title {
@@ -320,6 +323,55 @@ button {
             background-color: rgb(248, 82, 82);
           } 
       }
+    }
+  }
+}
+
+//pagination nav
+.Nav-paged {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+
+  .pagination-center {
+    flex-grow: 1;
+    text-align: center;
+
+    .pagination {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .page-btn {
+        background-color: #f0f0f0;
+        border: none;
+        padding: 0.4rem 0.7rem;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #e0e0e0;
+        }
+      }
+    }
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    label {
+      font-weight: 500;
+    }
+
+    select {
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
     }
   }
 }
