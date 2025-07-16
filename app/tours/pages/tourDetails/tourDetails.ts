@@ -1,5 +1,8 @@
+import { ReservationsServis } from "../../../tourReservations/service/reservations.service.js";
 import { Tour } from "../../model/tour.model.js";
 import { TourService } from "../../service/tour.service.js";
+
+const reservationService = new ReservationsServis();
 
 const tourService = new TourService();
 
@@ -8,7 +11,7 @@ const container = document.querySelector('.tour-details-container') as HTMLEleme
 function renderTourData(tourId: string): void {
     tourService.getById(tourId)
         .then((response: Tour) => {
-            
+            const availableRoom = calculateAvailable(response);
             if (!container) {
                 console.error('Container not found');
                 return;
@@ -18,6 +21,7 @@ function renderTourData(tourId: string): void {
             
             // -------- Tour Info --------
             const tourInfoSection = document.createElement('div');
+            tourInfoSection.classList.add("tour-info-section");
             tourInfoSection.innerHTML = `
                 <section class="tour-title-section">
                     <h1 class="tour-title">${response.name}</h1>
@@ -37,8 +41,8 @@ function renderTourData(tourId: string): void {
 
                 <section class="tour-images-section">
                     <div class="tour-images">
-                        <img src="../../../assets/nopreview.png" alt="Map View" class="map-image">
-                        <img src="../../../assets/nopreview.png" alt="Location Image" class="location-image">
+                        <img src="../../../assets/map_preview.png" alt="Map View" class="map-image">
+                        <img src="../../../assets/tour_preview.png" alt="Location Image" class="location-image">
                     </div>
                 </section>
 
@@ -46,6 +50,7 @@ function renderTourData(tourId: string): void {
                     <div class="tour-meta">
                         <div class="meta-left">
                             <p><strong>Number of Guests:</strong> ${response.maxGuests}</p>
+                            <p class="green"><strong>Still available:</strong> ${availableRoom}</p>
                             <p><strong>Guide Name:</strong> ${response.guide?.username ?? 'Unknown'}</p>
                         </div>
                         <div class="meta-right">
@@ -71,7 +76,11 @@ function renderTourData(tourId: string): void {
             
             if (role === "turista") {
                 editBtn.style.display = "none";
-                deleteBtn.style.display="none"
+                deleteBtn.style.display="none";
+                reserveBtn.onclick = () => {
+                    event.stopPropagation();
+                    window.location.href = `../../../tourReservations/pages/tourReservationsForm/tourReservationsForm.html?tourId=${response.id}`;
+                };
             } else if (role === "vodic") {
                 reserveBtn.style.display = "none";
 
@@ -166,7 +175,16 @@ function renderTourData(tourId: string): void {
                     resBlock.innerHTML = `
                         <p><strong>User ID:</strong> ${res.userId}</p>
                         <p><strong>Number of Guests:</strong> ${res.numberOfGuests}</p>
+                        <button class="del-res-btn">Delete reservation</button>
                     `;
+                    // Add event listener Delete btn
+                    const deleteBtn = resBlock.querySelector('.del-res-btn')
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', () => {
+                        reservationService.delete(res.id.toString())
+                        location.reload()
+                        })
+                    }
                     reservationSection.appendChild(resBlock);
                 }
             }
@@ -181,6 +199,17 @@ function renderTourData(tourId: string): void {
 function trimText(text: string, maxLength: number = 250): string {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
+function calculateAvailable(response: Tour): number {
+    if (response && response.tourReservations) {
+        let bookedGuests = 0;
+        for (const reservation of response.tourReservations) {
+            bookedGuests += reservation.numberOfGuests ?? 0;
+        }
+
+        return (response.maxGuests ?? 0) - bookedGuests;
+    }
+    return 0;
+} 
 
 function formatDate(isoDateString: string): string {
   const date = new Date(isoDateString);

@@ -29,7 +29,6 @@ function renderData(): void {
         detailsButton.textContent = 'Detaljnije';
         detailsButton.style.width = 'auto';
         
-        const keypointId = keypoint.id;
         detailsButton.onclick = function () {
           event.stopPropagation();
         window.location.href = `../keypointDetails/keypointDetails.html?keypointId=${keypoint.id}`;
@@ -44,7 +43,7 @@ function renderData(): void {
         deleteButton.style.width = 'auto';
 
         deleteButton.onclick = function(){
-        keypointService.delete(keypointId.toString())
+        keypointService.delete(keypoint.id.toString())
             .then(() => {
             newRow.remove(); 
             })
