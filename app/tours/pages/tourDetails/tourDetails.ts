@@ -11,7 +11,7 @@ const container = document.querySelector('.tour-details-container') as HTMLEleme
 function renderTourData(tourId: string): void {
     tourService.getById(tourId)
         .then((response: Tour) => {
-            const availableRoom = calculateAvailable(response);
+            const availableRoom = tourService.calculateAvailable(response);
             if (!container) {
                 console.error('Container not found');
                 return;
@@ -199,17 +199,6 @@ function renderTourData(tourId: string): void {
 function trimText(text: string, maxLength: number = 250): string {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
-function calculateAvailable(response: Tour): number {
-    if (response && response.tourReservations) {
-        let bookedGuests = 0;
-        for (const reservation of response.tourReservations) {
-            bookedGuests += reservation.numberOfGuests ?? 0;
-        }
-
-        return (response.maxGuests ?? 0) - bookedGuests;
-    }
-    return 0;
-} 
 
 function formatDate(isoDateString: string): string {
   const date = new Date(isoDateString);

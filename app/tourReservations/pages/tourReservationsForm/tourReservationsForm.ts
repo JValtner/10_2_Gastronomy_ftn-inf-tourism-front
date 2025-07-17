@@ -17,7 +17,7 @@ function initializeForm(): void {
                 (document.querySelector('#user-name') as HTMLElement).textContent = `Vodic: ${tour.guide.username}`;
                 (document.querySelector('#tour-date') as HTMLElement).textContent = `Datum i vreme: ${formatDate(tour.dateTime)}`;
                 (document.querySelector('#tour-maxGuests') as HTMLElement).textContent = `Ukupan broj mesta na turi:${tour.maxGuests}`;
-                (document.querySelector('#tour-availableGuests') as HTMLElement).textContent = `Raspoloziv broj mesta na turi:`;//TODO available room
+                (document.querySelector('#tour-availableGuests') as HTMLElement).textContent = `Raspoloziv broj mesta na turi: ${tourService.calculateAvailable(tour)}`;//TODO available room
             })
             .catch(error => {
                 console.error(error.status, error.text)
@@ -78,6 +78,7 @@ function submit(redirectPath: string): void {
             if (msg) msg.textContent = error.message || "Došlo je do greške prilikom rezervacije."
         })
 }
+
 
 // Format date
 function formatDate(isoDateString: string): string {

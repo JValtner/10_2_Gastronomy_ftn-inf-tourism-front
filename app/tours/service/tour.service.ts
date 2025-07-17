@@ -144,5 +144,16 @@ export class TourService {
     getName(): string{
         return localStorage.getItem("username") || " Guest"
     
-}
+    }
+    calculateAvailable(response: Tour): number {
+    if (response && response.tourReservations) {
+        let bookedGuests = 0;
+        for (const reservation of response.tourReservations) {
+            bookedGuests += reservation.numberOfGuests ?? 0;
+        }
+
+        return (response.maxGuests ?? 0) - bookedGuests;
+    }
+    return 0;
+} 
 }
