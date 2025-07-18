@@ -93,6 +93,7 @@ section {
 
 
 .reserve-btn-wrapper,
+.rate-btn-wrapper,
 .edit-btn-wrapper,
 .delete-btn-wrapper {
   text-align: center;
@@ -101,6 +102,7 @@ section {
 
 /* Common button styles */
 .reserve-btn,
+.rate-btn,
 .edit-btn,
 .delete-btn {
   padding: 0.75rem 1.5rem;
@@ -133,6 +135,14 @@ section {
 
 .reserve-btn:hover {
   background-color: green;
+  transform: scale(1.05);
+}
+.rate-btn {
+  background-color: rgb(205, 50, 200);
+}
+
+.rate-btn:hover {
+  background-color: rgb(80, 2, 54);
   transform: scale(1.05);
 }
 
@@ -199,6 +209,64 @@ section {
     border-radius: 8px;
     object-fit: cover;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+//popup comments
+.review-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 3px solid #28a745;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  padding: 20px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+
+  &.hidden {
+    display: none;
+  }
+
+  .review-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  select, textarea {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  textarea {
+    resize: vertical;
+    height: 100px;
+  }
+
+  
+  .close-review-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #888;
+
+    &:hover {
+      color: #000;
+    }
   }
 }
 

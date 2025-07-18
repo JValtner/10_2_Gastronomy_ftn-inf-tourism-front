@@ -1,11 +1,12 @@
+import { TourFeedbacks } from "../../model/tourFeedbacks.model.js";
+import { FeedbacksServis } from "../../service/tourFeedbacks.service.js";
 import { ReservationsServis } from "../../../tourReservations/service/reservations.service.js";
 import { Tour } from "../../model/tour.model.js";
 import { TourService } from "../../service/tour.service.js";
 
 const reservationService = new ReservationsServis();
-
+const tourFeedbacksService = new FeedbacksServis();
 const tourService = new TourService();
-
 const container = document.querySelector('.tour-details-container') as HTMLElement;
 
 function renderTourData(tourId: string): void {
@@ -18,34 +19,54 @@ function renderTourData(tourId: string): void {
             }
 
             container.innerHTML = '';
-            
+
             // -------- Tour Info --------
             const tourInfoSection = document.createElement('div');
             tourInfoSection.classList.add("tour-info-section");
             tourInfoSection.innerHTML = `
                 <section class="tour-title-section">
+                    <div id="review-popup" class="review-popup hidden">
+                        <div class="review-content">
+                            <button class="close-review-btn" id="close-review-btn">✖</button>
+                            <h2>Leave a Review</h2>
+                            <label for="grade">Rating:</label>
+                            <select id="grade">
+                                <option value="">Select</option>
+                                <option value="1">★☆☆☆☆</option>
+                                <option value="2">★★☆☆☆</option>
+                                <option value="3">★★★☆☆</option>
+                                <option value="4">★★★★☆</option>
+                                <option value="5">★★★★★</option>
+                            </select>
+                            <label for="comment">Comment:</label>
+                            <textarea id="comment" placeholder="Your feedback..."></textarea>
+                            <div class="tooltip bottom">
+                                <button class="submit-review-btn" id="submit-review-btn">Submit</button>
+                                <span class="tooltiptext">Oceni turu</span>
+                            </div>     
+                            <div class="form-row">
+                                <div id="status-msg" class="status-msg" style="display: none;">
+                                    <span id="status-text"></span>
+                                    <div class="status-bar"></div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <p id="error-msg"></p>
+                            </div>
+                        </div>
+                    </div>
                     <h1 class="tour-title">${response.name}</h1>
-                    <!-- Reserve Button -->
-                    <div class="reserve-btn-wrapper">   
-                        <button class="reserve-btn">Rezervisi</button>
-                    </div>
-                    <!-- Edit Button -->
-                    <div class="edit-btn-wrapper">   
-                        <button class="edit-btn">Izmeni Turu</button>
-                    </div>
-                    <!-- Delete Button -->
-                    <div class="delete-btn-wrapper">   
-                        <button class="delete-btn">Obrisi Turu</button>
-                    </div>
+                    <div class="rate-btn-wrapper"><button class="rate-btn">Oceni turu</button></div>
+                    <div class="reserve-btn-wrapper"><button class="reserve-btn">Rezervisi</button></div>
+                    <div class="edit-btn-wrapper"><button class="edit-btn">Izmeni Turu</button></div>
+                    <div class="delete-btn-wrapper"><button class="delete-btn">Obrisi Turu</button></div>
                 </section>
-
                 <section class="tour-images-section">
                     <div class="tour-images">
                         <img src="../../../assets/map_preview.png" alt="Map View" class="map-image">
                         <img src="../../../assets/tour_preview.png" alt="Location Image" class="location-image">
                     </div>
                 </section>
-
                 <section class="tour-meta-section">
                     <div class="tour-meta">
                         <div class="meta-left">
@@ -59,88 +80,93 @@ function renderTourData(tourId: string): void {
                         </div>
                     </div>
                 </section>
-
                 <section class="tour-description-section">
                     <h2>Description</h2>
                     <p>${response.description}</p>
                 </section>
-            `
-            
+            `;
             container.appendChild(tourInfoSection);
-            //-------- role edit/reserve btn swith --------
 
+            // -------- Role logic --------
             const reserveBtn = container.querySelector('.reserve-btn-wrapper') as HTMLElement;
+            const rateBtn = container.querySelector('.rate-btn-wrapper') as HTMLElement;
+            const closeReviewBtn = document.getElementById('close-review-btn') as HTMLButtonElement;
+            const submitReviewBtn = document.getElementById('submit-review-btn') as HTMLButtonElement;
             const editBtn = container.querySelector('.edit-btn-wrapper') as HTMLElement;
             const deleteBtn = container.querySelector('.delete-btn-wrapper') as HTMLElement;
             const role = localStorage.getItem("role");
-            
+
             if (role === "turista") {
                 editBtn.style.display = "none";
-                deleteBtn.style.display="none";
+                deleteBtn.style.display = "none";
+
                 reserveBtn.onclick = () => {
                     event.stopPropagation();
                     window.location.href = `../../../tourReservations/pages/tourReservationsForm/tourReservationsForm.html?tourId=${response.id}`;
                 };
+                rateBtn.onclick = () => {
+                    event.stopPropagation();
+                    openReviewPopup();
+                };
+                closeReviewBtn.onclick = () => {
+                    closeReviewPopup();
+                };
+                submitReviewBtn.onclick = () => {
+                    submitReview(response);
+                };
             } else if (role === "vodic") {
                 reserveBtn.style.display = "none";
 
-                //Edit Btn event listener
                 editBtn.onclick = () => {
                     event.stopPropagation();
                     window.location.href = `../tourForm/tourForm.html?id=${response.id}`;
                 };
 
-                //Delete Btn event listener
                 deleteBtn.onclick = () => {
-                    alert("Dali ste sigurni da zelite da obrisete turu?")
+                    alert("Dali ste sigurni da zelite da obrisete turu?");
                     event.stopPropagation();
                     tourService.delete(response.id.toString())
-                    .catch(error => console.error(error.status, error.text));
+                        .catch(error => console.error(error.status, error.text));
                 };
             } else {
                 container.innerHTML = "<p>Korisnik nedefinisan. Molimo vas da se ulogujete.</p>";
                 return;
             }
 
-            // -------- Key Points --------
+            // -------- Keypoints --------
             const keypointSection = document.createElement('section');
             keypointSection.classList.add('keypoints-section');
             keypointSection.innerHTML = `<h2>Key Points in Tour</h2>`;
-
             const keypoints = Array.isArray(response.keyPoints) ? response.keyPoints : [];
 
             if (keypoints.length === 0) {
-                const noKP = document.createElement('p');
-                noKP.textContent = 'No keypoints to show';
-                keypointSection.appendChild(noKP);
+                keypointSection.innerHTML += '<p>No keypoints to show</p>';
             } else {
                 for (const kp of keypoints) {
                     const kpBlock = document.createElement('div');
                     kpBlock.classList.add('keypoint');
                     kpBlock.innerHTML = `
                         <div class="keypoint-desc">
-                        <p><strong>Name:</strong> ${kp.name}</p>
-                        <p><strong>Latitude:</strong> ${kp.latitude}</p>
-                        <p><strong>Longitude:</strong> ${kp.longitude}</p>
-                        <p><strong>Description:</strong> ${trimText(kp.description)}</p>
+                            <p><strong>Name:</strong> ${kp.name}</p>
+                            <p><strong>Latitude:</strong> ${kp.latitude}</p>
+                            <p><strong>Longitude:</strong> ${kp.longitude}</p>
+                            <p><strong>Description:</strong> ${trimText(kp.description)}</p>
                         </div>
                         <div class="keypoint-img">
-                        <img src="${kp.imageUrl}" alt="Key Point Image" style="max-width:300px;">
-                        </div>
-                    `;
+                            <img src="${kp.imageUrl}" alt="Key Point Image" style="max-width:300px;">
+                        </div>`;
+                    kpBlock.onclick = () => {
+                        window.location.href = `../../../keypoints/pages/keypointDetails/keypointDetails.html?keypointId=${kp.id}`;
+                    };
                     keypointSection.appendChild(kpBlock);
-                    //Keypoint block view details Event listener
-                    kpBlock.addEventListener("click", ()=>{
-                    window.location.href=`../../../keypoints/pages/keypointDetails/keypointDetails.html?keypointId=${kp.id}`;
-                    })
                 }
             }
             container.appendChild(keypointSection);
 
+            // -------- Feedbacks --------
             const feedbackSection = document.createElement('section');
             feedbackSection.classList.add('feedbacks-section');
             feedbackSection.innerHTML = `<h2>Feedbacks</h2>`;
-
             const feedbacks = Array.isArray(response.tourFeedbacks) ? response.tourFeedbacks : [];
 
             if (feedbacks.length === 0) {
@@ -152,18 +178,16 @@ function renderTourData(tourId: string): void {
                     fbBlock.innerHTML = `
                         <p><strong>Rating:</strong> ${'★'.repeat(fb.userRating)}${'☆'.repeat(5 - fb.userRating)}</p>
                         <p><strong>Comment:</strong> ${fb.userComment}</p>
-                        <p><strong>Date:</strong> ${formatDate(fb.postedOn)}</p>
-                    `;
+                        <p><strong>Date:</strong> ${formatDate(fb.postedOn)}</p>`;
                     feedbackSection.appendChild(fbBlock);
                 }
             }
             container.appendChild(feedbackSection);
 
-            // -------- Tour Reservations --------
+            // -------- Reservations --------
             const reservationSection = document.createElement('section');
             reservationSection.classList.add('reservations-section');
             reservationSection.innerHTML = `<h2>Reservations</h2>`;
-
             const reservations = Array.isArray(response.tourReservations) ? response.tourReservations : [];
 
             if (reservations.length === 0) {
@@ -175,25 +199,19 @@ function renderTourData(tourId: string): void {
                     resBlock.innerHTML = `
                         <p><strong>User ID:</strong> ${res.userId}</p>
                         <p><strong>Number of Guests:</strong> ${res.numberOfGuests}</p>
-                        <button class="del-res-btn">Delete reservation</button>
-                    `;
-                    // Add event listener Delete btn
-                    const deleteBtn = resBlock.querySelector('.del-res-btn')
-                    if (deleteBtn) {
-                        deleteBtn.addEventListener('click', () => {
-                        reservationService.delete(res.id.toString())
-                        location.reload()
-                        })
-                    }
+                        <button class="del-res-btn">Delete reservation</button>`;
+                    resBlock.querySelector('.del-res-btn')?.addEventListener('click', () => {
+                        reservationService.delete(res.id.toString());
+                        location.reload();
+                    });
                     reservationSection.appendChild(resBlock);
                 }
             }
-            container.appendChild(reservationSection);  
+            container.appendChild(reservationSection);
         })
         .catch(error => {
             console.error(error.status, error.message);
         });
-        
 }
 
 function trimText(text: string, maxLength: number = 250): string {
@@ -201,18 +219,97 @@ function trimText(text: string, maxLength: number = 250): string {
 }
 
 function formatDate(isoDateString: string): string {
-  const date = new Date(isoDateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${day}.${month}.${year}  ${hours}:${minutes}`;
+    const date = new Date(isoDateString);
+    return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth()+1).toString().padStart(2, '0')}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+}
+
+// Feedback popup controls
+function openReviewPopup() {
+    document.getElementById('review-popup')?.classList.remove('hidden');
+}
+
+function closeReviewPopup() {
+    document.getElementById('review-popup')?.classList.add('hidden');
+}
+
+function submitReview(tour: Tour) {
+    const gradeSelect = document.getElementById('grade') as HTMLSelectElement | null;
+    const commentTextarea = document.getElementById('comment') as HTMLTextAreaElement | null;
+
+    if (!gradeSelect || !commentTextarea) {
+        alert("Form elements not found.");
+        return;
+    }
+
+    const grade = parseInt(gradeSelect.value);
+    const comment = commentTextarea.value.trim();
+
+    if (isNaN(grade) || comment === '') {
+        alert('Please fill out both fields.');
+        return;
+    }
+
+    const loggedInUser = localStorage.getItem("userId") || "null";
+    if (!loggedInUser) {
+        alert("User not logged in.");
+        return;
+    }
+
+    const formData: TourFeedbacks = {
+        tourId: tour.id,
+        userId: parseInt(loggedInUser),
+        userRating: grade,
+        userComment: comment,
+        postedOn: new Date().toISOString()
+    };
+
+    tourFeedbacksService.addNew(formData)
+        .then(() => {
+            statusMsg("new", grade, comment);
+            gradeSelect.value = "";
+            commentTextarea.value = "";
+            renderTourData(tour.id.toString()); // optional: refresh feedbacks
+        })
+        .catch(error => {
+            console.error(error);
+            const msg = document.getElementById("error-msg");
+            if (msg) msg.textContent = error.message || "Došlo je do greške prilikom ocenjivanja.";
+        });
+}
+
+// Status message
+function statusMsg(action: string, grade?: number, comment?: string): void {
+    const status = document.getElementById('status-msg') as HTMLParagraphElement | null;
+    const text = document.getElementById('status-text') as HTMLSpanElement | null;
+    const bar = status?.querySelector('.status-bar') as HTMLDivElement | null;
+
+    if (!status || !text || !bar) return;
+
+    status.style.display = 'block';
+    text.textContent = 'Postupak u toku...';
+
+    bar.classList.remove('status-bar');
+    void bar.offsetWidth;
+    bar.classList.add('status-bar');
+
+    setTimeout(() => {
+        text.textContent = action === "new"
+            ? "Uspešno poslato."
+            : "Uspešno izmenjeno.";
+    }, 4800);
+
+    if (grade !== undefined && comment !== undefined) {
+        console.log('Submitted:', { grade, comment });
+    }
+
+    closeReviewPopup();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
     const queryString = window.location.search;
     const urlparams = new URLSearchParams(queryString);
     const tourId = urlparams.get('tourId');
-    renderTourData(tourId);
+    if (tourId) {
+        renderTourData(tourId);
+    }
 });
