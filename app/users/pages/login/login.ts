@@ -36,7 +36,7 @@ event.preventDefault();
         window.location.href = `../../../tours/pages/userTours/userTours.html?ownerId=${user.id}`;
         
       } else if (user.role === "turista") {
-        window.location.href = `../../../tours/pages/userTours/userTours.html?ownerId=${user.id}`;
+        window.location.href = ``;
       } else {
         window.location.href = "/login.html";
       }

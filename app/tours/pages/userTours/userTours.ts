@@ -43,7 +43,7 @@ function renderTours(tours: TourResponse["data"]) {
   for (const tour of tours) {
     const card = document.createElement('div');
     card.className = 'tour-card';
-    //tou details event listener
+    //tour details event listener
     card.addEventListener("click", ()=>{
       window.location.href=`../tourDetails/tourDetails.html?tourId=${tour.id}`;
     })

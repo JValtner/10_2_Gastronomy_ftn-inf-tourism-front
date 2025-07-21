@@ -1,6 +1,7 @@
 export interface TourReservations{
     id?: number;
-    touId: number;
+    tourId: number;
     userId: number;
     numberOfGuests: number;
+    createdOn: string;
 }

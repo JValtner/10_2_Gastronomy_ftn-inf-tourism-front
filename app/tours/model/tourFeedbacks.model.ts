@@ -1,6 +1,6 @@
 export interface TourFeedbacks{
     id?: number;
-    touId: number;
+    tourId: number;
     userId: number;
     userRating?: number;
     userComment?: string;

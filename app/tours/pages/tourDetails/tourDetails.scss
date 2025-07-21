@@ -1,6 +1,11 @@
 @import "../../../styles/global";
 @import "../userTours/userTours";
 
+$info-color: #22ff00;
+$keypoints-color: #eaff00;
+$reservations-color: #007bff;
+$feedbacks-color: #ff9900;
+
 section {
   border: 1px solid #ccc;
   margin: 1rem 0;
@@ -31,6 +36,9 @@ section {
   justify-content: space-between;
   gap: 1rem;
   margin: 1rem 0;
+  .map-image, .location-image{
+    max-width: 40%;
+  }
 }
 
 .tour-meta {
@@ -40,6 +48,17 @@ section {
   padding: 1rem;
   margin-bottom: 1rem;
 }
+.tour-title-section,
+.tour-images-section,
+.tour-meta-section,
+.tour-description-section{
+  border-left: 4px solid $info-color;
+}
+
+
+.green{
+      color:green;
+    }
 
 .keypoints-section,
 .feedback-section,
@@ -48,6 +67,15 @@ section {
   background: #f5f5f5;
   padding: 1rem;
   border-radius: 8px;
+}
+.keypoints-section{
+  border-left: 4px solid $keypoints-color;
+}
+.reservations-section{
+  border-left: 4px solid $reservations-color;
+}
+.feedbacks-section{
+  border-left: 4px solid $feedbacks-color;
 }
 
 .keypoint,
@@ -65,6 +93,7 @@ section {
 
 
 .reserve-btn-wrapper,
+.rate-btn-wrapper,
 .edit-btn-wrapper,
 .delete-btn-wrapper {
   text-align: center;
@@ -73,6 +102,7 @@ section {
 
 /* Common button styles */
 .reserve-btn,
+.rate-btn,
 .edit-btn,
 .delete-btn {
   padding: 0.75rem 1.5rem;
@@ -83,6 +113,20 @@ section {
   margin-left: auto;
   transition: background-color 0.3s, transform 0.2s;
 }
+.del-res-btn {
+  padding: 0.75rem 1.5rem;
+  color: white;
+  background-color: crimson;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: auto;
+  transition: background-color 0.3s, transform 0.2s;
+  &:hover{
+    background-color: darkred;
+    transform: scale(1.05);
+  }
+}
 
 /* Individual colors */
 .reserve-btn {
@@ -91,6 +135,14 @@ section {
 
 .reserve-btn:hover {
   background-color: green;
+  transform: scale(1.05);
+}
+.rate-btn {
+  background-color: rgb(205, 50, 200);
+}
+
+.rate-btn:hover {
+  background-color: rgb(80, 2, 54);
   transform: scale(1.05);
 }
 
@@ -157,6 +209,64 @@ section {
     border-radius: 8px;
     object-fit: cover;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+//popup comments
+.review-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 3px solid #28a745;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  padding: 20px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+
+  &.hidden {
+    display: none;
+  }
+
+  .review-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  select, textarea {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  textarea {
+    resize: vertical;
+    height: 100px;
+  }
+
+  
+  .close-review-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #888;
+
+    &:hover {
+      color: #000;
+    }
   }
 }
 
