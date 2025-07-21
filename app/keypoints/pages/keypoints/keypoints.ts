@@ -28,10 +28,10 @@ function renderData(): void {
         const detailsButton = document.createElement('button');
         detailsButton.textContent = 'Detaljnije';
         detailsButton.style.width = 'auto';
-
-        const keypointId = keypoint.id;
+        
         detailsButton.onclick = function () {
-        window.location.href = `../tourForm/tourForm.html?id=${keypointId}`;
+          event.stopPropagation();
+        window.location.href = `../keypointDetails/keypointDetails.html?keypointId=${keypoint.id}`;
         };
         cell2.appendChild(detailsButton);
         newRow.appendChild(cell2);
@@ -43,7 +43,7 @@ function renderData(): void {
         deleteButton.style.width = 'auto';
 
         deleteButton.onclick = function(){
-        keypointService.delete(keypointId.toString())
+        keypointService.delete(keypoint.id.toString())
             .then(() => {
             newRow.remove(); 
             })
