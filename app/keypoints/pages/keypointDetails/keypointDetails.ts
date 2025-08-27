@@ -1,6 +1,8 @@
 
 import { Keypoint } from "../../model/keypoint.model.js";
 import { KeypointServis } from "../../service/keypoint.servis.js";
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const keypointService = new KeypointServis();
 
@@ -28,7 +30,7 @@ function renderKeypointData(keypointId: string): void {
                 <section class="tour-images-section">
                     <div class="tour-images">
                         <img src="${response.imageUrl || '../../../assets/nopreview.png'}" alt="Keypoint Image" class="location-image">
-                        <img src="../../../assets/nopreview.png" alt="Map Placeholder" class="map-image">
+                        <div id="map"></div>
                     </div>
                 </section>
 
@@ -51,6 +53,7 @@ function renderKeypointData(keypointId: string): void {
             `;
 
             container.appendChild(keypointInfoSection);
+            mapDisplay(response.latitude, response.longitude);
 
             //-------- role edit/delete btn swith --------
             const deleteBtn = container.querySelector('.delete-btn-wrapper') as HTMLElement;
@@ -76,6 +79,24 @@ function renderKeypointData(keypointId: string): void {
         .catch(error => {
             console.error(error.status, error.message);
         });
+}
+
+function mapDisplay(latitude:number, longitude:number) {
+  
+  // Initialize map
+  const map = L.map('map').setView([latitude, longitude], 13);
+  // Add OSM tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  // Marker variable to update on click
+    let marker: L.Marker | null = null;
+  // Add or move marker
+      if (marker) {
+        marker.setLatLng([latitude, longitude]);
+      } else {
+        marker = L.marker([latitude, longitude]).addTo(map);
+      }
 }
 
 window.addEventListener('DOMContentLoaded', () => {

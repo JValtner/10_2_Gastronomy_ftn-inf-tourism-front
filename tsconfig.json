@@ -1,8 +1,9 @@
 {
-  "compilerOptions": {     
+  "compilerOptions": {
     "target": "es2017",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "sourceMap": true,
-    "outDir": "dist",
-    "moduleResolution": "node"
+    "outDir": "dist"
   }
 }

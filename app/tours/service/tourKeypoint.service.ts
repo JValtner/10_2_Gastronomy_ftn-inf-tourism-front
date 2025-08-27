@@ -44,4 +44,24 @@ export class TourKeypointService {
                 throw error;
             });
     }
+
+    cloneKeypointToTour(oldTourId: number, newTourId: number): Promise<string> {
+    const url = `${this.apiUrl}/${oldTourId}/clone-keypoints/${newTourId}`;
+    return fetch(url, {
+        method: 'POST',
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(message => {
+                throw { status: response.status, message };
+            });
+        }
+        return response.text();
+    })
+    .catch(error => {
+        console.error(`Error [${error.status}]: ${error.message}`);
+        throw error;
+    });
+    }
+
 }

@@ -1,12 +1,15 @@
 import { Tour } from "../../model/tour.model.js"
 import { TourService } from "../../service/tour.service.js"
+import { TourKeypointService } from "../../service/tourKeypoint.service.js"
 
-const tourService = new TourService()
+const tourService = new TourService();
+const tourKeypointService = new TourKeypointService();
 
 function initializeForm(): void {
     const queryString = window.location.search
     const urlparams = new URLSearchParams(queryString)
     const id = urlparams.get('id')
+    const action = urlparams.get('action')
 
     if (id) {
         tourService.getById(id)
@@ -15,22 +18,32 @@ function initializeForm(): void {
                 (document.querySelector('#description') as HTMLInputElement).value = tour.description;
                 (document.querySelector('#datetime') as HTMLInputElement).value = tour.dateTime;
                 (document.querySelector('#maxGuests') as HTMLInputElement).value = tour.maxGuests.toString();
-                if (tour.status==="u pripremi"){
+
+                if (tour.status === "u pripremi") {
                     (document.querySelector('#status') as HTMLInputElement).value = "Status: U pripremi";
-                }else if(tour.status==="objavljena"){
+                } else if (tour.status === "objavljena") {
                     (document.querySelector('#status') as HTMLInputElement).value = "Status: Objavljena";
-                }
-                else{
+                } else {
                     (document.querySelector('#status') as HTMLInputElement).value = "Status: Nepoznat";
                 }
 
                 const guideInput = document.querySelector('#guide') as HTMLInputElement | null
                 if (guideInput) guideInput.value = tour.guide.username
-            }).catch(error => {
+
+                // If we are cloning, clear ID-related references so save creates new tour
+                if (action === "clone") {
+                    // Optionally tweak the name to indicate it's a copy
+                    const nameInput = document.querySelector('#name') as HTMLInputElement
+                    nameInput.value = tour.name + " (Copy)";
+
+                    // Reset status always to "u pripremi" for clones
+                    (document.querySelector('#status') as HTMLInputElement).value = "Status: U pripremi";
+                }
+            })
+            .catch(error => {
                 console.error(error.status, error.text)
             })
-    }
-    else {
+    } else {
         const guideInput = document.querySelector('#guide') as HTMLInputElement | null
         if (guideInput) guideInput.value = tourService.getName()
     }
@@ -50,8 +63,8 @@ function statusMsg(action: string): void {
 
     setTimeout(() => {
         text.textContent = action === "new"
-            ? "Korisnik je uspešno kreiran."
-            : "Korisnik je uspešno izmenjen."
+            ? "Tura je uspešno kreirana."
+            : "Tura je uspešno izmenjena."
     }, 4800)
 }
 
@@ -82,31 +95,34 @@ function submit(event: Event): void {
     const queryString = window.location.search
     const urlparams = new URLSearchParams(queryString)
     const id = urlparams.get('id')
+    const actionParam = urlparams.get('action')
 
-    const action = id
-        ? tourService.update(id, formData)
-        : tourService.addNew(formData)
+    let actionPromise: Promise<Tour>
 
-    action
+    if (id && actionParam === "edit") {
+        actionPromise = tourService.update(id, formData)
+    } else if (id && actionParam === "clone") {
+        actionPromise = tourService.addNew(formData).then((newTour: Tour) => {
+            return tourKeypointService.cloneKeypointToTour(parseInt(id), newTour.id)
+                .then(() => newTour)
+        })
+    } else {
+        actionPromise = tourService.addNew(formData)
+    }
+    
+    actionPromise
         .then((tour: Tour) => {
-            if (id) {
-                statusMsg("edit")
-                setTimeout(() => {
-                    window.location.href = `../tourFormKeypoints/tourFormKeypoints.html?tourId=${id}`
-                }, 5000)
-            } else {
-                statusMsg("new")
-                setTimeout(() => {
-                    window.location.href = `../tourFormKeypoints/tourFormKeypoints.html?tourId=${tour.id}`
-                }, 5000)
-            }
+            statusMsg(id && actionParam === "edit" ? "edit" : "new")
+            setTimeout(() => {
+                window.location.href = `../tourFormKeypoints/tourFormKeypoints.html?tourId=${tour.id}`
+            }, 5000)
         })
         .catch(error => {
             console.error(error.status, error.message || error.text)
         })
 }
 
-//tolltips
+
 function attachTooltipTimeouts() {
     document.querySelectorAll('.tooltip').forEach(tooltip => {
         const tooltipText = tooltip.querySelector('.tooltiptext') as HTMLElement
@@ -132,14 +148,14 @@ function attachTooltipTimeouts() {
     })
 }
 
-
 const fieldArray: string[] = ['name', 'description', 'datetime', 'maxGuests']
 const fieldValid: { [key: string]: boolean } = {
     name: false,
     description: false,
     datetime: false,
     maxGuests: false
-} 
+}
+
 function validate(id: string): void {
     const input = document.getElementById(id) as HTMLInputElement
     const errSpan = document.getElementById(`${id}-err`) as HTMLElement
@@ -168,7 +184,7 @@ function validate(id: string): void {
         if (isNaN(number) || number <= 0) {
             errorMsg = 'Broj gostiju mora biti pozitivan broj.'
         }
-    } 
+    }
 
     if (errorMsg) {
         fieldValid[id] = false
@@ -193,7 +209,6 @@ function validateForm(): void {
     btn.disabled = !allValid
 }
 
-
 // DOM Loaded
 window.addEventListener("DOMContentLoaded", () => {
     initializeForm()
@@ -205,15 +220,14 @@ window.addEventListener("DOMContentLoaded", () => {
     fieldArray.forEach(id => {
         const input = document.getElementById(id) as HTMLInputElement
         if (input) {
-            input.addEventListener('input', () => validate(id)) // live validation
+            input.addEventListener('input', () => validate(id))
         }
     })
 
-    
     setTimeout(() => {
         fieldArray.forEach(id => validate(id))
         validateForm()
-    }, 100) // slight delay so DOM fills first
+    }, 100)
 
     if (form) {
         form.addEventListener('submit', (event) => {

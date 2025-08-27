@@ -3,6 +3,11 @@ import { FeedbacksServis } from "../../service/tourFeedbacks.service.js";
 import { ReservationsServis } from "../../../tourReservations/service/reservations.service.js";
 import { Tour } from "../../model/tour.model.js";
 import { TourService } from "../../service/tour.service.js";
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import { Keypoint } from "../../../keypoints/model/keypoint.model.js";
 
 const reservationService = new ReservationsServis();
 const tourFeedbacksService = new FeedbacksServis();
@@ -63,7 +68,7 @@ function renderTourData(tourId: string): void {
                 </section>
                 <section class="tour-images-section">
                     <div class="tour-images">
-                        <img src="../../../assets/map_preview.png" alt="Map View" class="map-image">
+                        <div id="map""></div>
                         <img src="../../../assets/tour_preview.png" alt="Location Image" class="location-image">
                     </div>
                 </section>
@@ -99,12 +104,12 @@ function renderTourData(tourId: string): void {
             if (role === "turista") {
                 editBtn.style.display = "none";
                 deleteBtn.style.display = "none";
-
+                
                 reserveBtn.onclick = () => {
                     event.stopPropagation();
                     window.location.href = `../../../tourReservations/pages/tourReservationsForm/tourReservationsForm.html?tourId=${response.id}`;
                 };
-                rateBtn.onclick = () => {
+                rateBtn.onclick = (event) => {
                     event.stopPropagation();
                     openReviewPopup();
                 };
@@ -116,6 +121,7 @@ function renderTourData(tourId: string): void {
                 };
             } else if (role === "vodic") {
                 reserveBtn.style.display = "none";
+                rateBtn.style.display = "none";
 
                 editBtn.onclick = () => {
                     event.stopPropagation();
@@ -162,7 +168,8 @@ function renderTourData(tourId: string): void {
                 }
             }
             container.appendChild(keypointSection);
-
+            mapDisplay(keypoints);//Load map into container
+            
             // -------- Feedbacks --------
             const feedbackSection = document.createElement('section');
             feedbackSection.classList.add('feedbacks-section');
@@ -304,6 +311,43 @@ function statusMsg(action: string, grade?: number, comment?: string): void {
 
     closeReviewPopup();
 }
+
+function mapDisplay(keypoints: Keypoint[]) {
+  if (keypoints.length > 0) {
+    const map = L.map('map').setView([keypoints[0].latitude, keypoints[0].longitude], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const waypoints = keypoints.map(kp => L.latLng(kp.latitude, kp.longitude));
+
+    // Fit map initially to all waypoints (in case routing takes time)
+    map.fitBounds(L.latLngBounds(waypoints), { padding: [50, 50] });
+
+    const control = L.Routing.control({
+      waypoints: waypoints,
+      router: L.Routing.osrmv1(),
+      lineOptions: { styles: [{ color: 'blue', weight: 4, opacity: 0.7 }] },
+      createMarker: (i, wp) => 
+        L.marker(wp.latLng).bindPopup(`<b>${keypoints[i].name}</b><br>${keypoints[i].description}`),
+      show: false,         // hide the directions panel
+      addWaypoints: false, // disable adding waypoints by user
+      collapsible: false,
+    }).addTo(map);
+
+    control.on('routesfound', (e) => {
+      const route = e.routes[0];
+      if (route && route.bounds) {
+        // Delay slightly to make sure route is rendered before zooming
+        setTimeout(() => {
+          map.fitBounds(route.bounds, { padding: [50, 50] });
+        }, 100);
+      }
+    });
+  }
+}
+
 
 window.addEventListener('DOMContentLoaded', () => {
     const queryString = window.location.search;

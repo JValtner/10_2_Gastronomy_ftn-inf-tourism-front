@@ -188,9 +188,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (btnUserTours) {
         btnUserTours.addEventListener('click', () => {
-            fieldArray.forEach(id => validate(id))
-            const allValid = fieldArray.every(fieldId => fieldValid[fieldId])
-            if (allValid) submit("../../../tours/pages/userTours/userTours.html")
+            window.location.href = "../../../tours/pages/userTours/userTours.html"
         })
     }
 

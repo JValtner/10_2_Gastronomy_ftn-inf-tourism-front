@@ -37,8 +37,13 @@ section {
   gap: 1rem;
   margin: 1rem 0;
   .map-image, .location-image{
-    max-width: 40%;
+    height: 350px; /* or desired fixed height */
+    width: 40%;
   }
+}
+#map {
+  height: 350px; /* or desired fixed height */
+  width: 40%;
 }
 
 .tour-meta {
