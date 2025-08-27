@@ -1,5 +1,7 @@
 import { Keypoint } from "../../model/keypoint.model.js";
 import { KeypointServis } from "../../service/keypoint.servis.js";
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const keypointService = new KeypointServis();
 // render data
@@ -198,8 +200,55 @@ function statusMsg(action: string): void {
   }, 2800);
 }
 
+//Map coordinate picker
+function mapCoordinatePicker() {
+  const latitude = 45.254245;
+  const longitude = 19.842881;
 
+  // Initialize map
+  const map = L.map('map').setView([latitude, longitude], 13);
 
+  // Add OSM tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Get input fields
+  const latInput = document.querySelector<HTMLInputElement>('#latitude');
+  const lngInput = document.querySelector<HTMLInputElement>('#longitude');
+
+  // Marker variable to update on click
+  let marker: L.Marker | null = null;
+
+  // Click event
+  map.on('click', function (e) {
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+
+    // after setting number values
+if (latInput) {
+  latInput.valueAsNumber = Math.round(lat * 1e6) / 1e6; // number with 6 decimals
+  validate('latitude');               // update your fieldValid[] and inline styles
+  latInput.setCustomValidity('');     // clear any custom validity
+  latInput.reportValidity();          // force browser to re-evaluate :invalid immediately
+}
+
+if (lngInput) {
+  lngInput.valueAsNumber = Math.round(lng * 1e6) / 1e6;
+  validate('longitude');
+  lngInput.setCustomValidity('');
+  lngInput.reportValidity();
+}
+
+    // Add or move marker
+    if (marker) {
+      marker.setLatLng([lat, lng]);
+    } else {
+      marker = L.marker([lat, lng]).addTo(map);
+    }
+  });
+}
+         
 //display preview
 function displayImg(): void {
   const img = document.querySelector("#img-preview") as HTMLImageElement;
@@ -217,6 +266,7 @@ window.addEventListener("DOMContentLoaded", () => {
     displayImg();
     attachTooltipTimeouts();
     renderData();
+    mapCoordinatePicker();
 
   // Attach onblur and on input validation for each input field
   fieldArray.forEach(id => {

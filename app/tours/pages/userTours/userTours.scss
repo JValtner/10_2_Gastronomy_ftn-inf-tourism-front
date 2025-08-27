@@ -375,3 +375,39 @@ button {
     }
   }
 }
+
+.statistics-display {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 30px;
+  padding: 20px;
+}
+
+.statistics-display .chart {
+  flex: 1 1 45%;           /* two per row, responsive */
+  min-width: 25%;
+  max-width: 40%;        /* ensure at least 2× bigger */
+  height: 300px;           /* taller for readability */
+  background: #fff;        /* white card style */
+  border-radius: 12px;     /* smoother corners */
+  padding: 20px;
+  margin: 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statistics-display .chart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.tour-map {
+  width: 250px;
+  height: 150px;   /* or any height you prefer */
+  margin-top: 10px;
+  border-radius: 8px;
+}

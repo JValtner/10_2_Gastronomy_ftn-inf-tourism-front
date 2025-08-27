@@ -34,6 +34,10 @@ section {
   img{
     max-width: 50%;
   }
+  #map {
+  height: 350px; /* or desired fixed height */
+  width: 100%;
+}
 }
 
 .tour-meta {

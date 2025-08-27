@@ -1,5 +1,6 @@
 import { Tour } from "../model/tour.model.js";
 import { TourResponse } from "../model/tourResponse.model.js";
+import { TourStats } from "../model/tourStats.model.js";
 
 export class TourService {
     private apiUrl: string;
@@ -24,6 +25,28 @@ export class TourService {
                 throw error;
             });
     }
+    getStats(userId: number | null, startDate: string, endDate: string): Promise<TourStats> {
+    const url = `${this.apiUrl}/stats?guideId=${userId}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorMessage => {
+                    throw { status: response.status, message: errorMessage };
+                });
+            }
+            return response.json();
+        })
+        .then((response: TourStats) => {
+            return response;
+        })
+        .catch(error => {
+            console.error('Error fetching stats:', error.status, error.message);
+            throw error;
+        });
+}
+
+
     getPaged(
     guideId: number | null = 0,
     page: number | null = 1,
