@@ -3,30 +3,30 @@ import { FeedbacksServis } from "../../service/tourFeedbacks.service.js";
 import { ReservationsServis } from "../../../tourReservations/service/reservations.service.js";
 import { Tour } from "../../model/tour.model.js";
 import { TourService } from "../../service/tour.service.js";
-import * as L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import * as L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import { Keypoint } from "../../../keypoints/model/keypoint.model.js";
 
 const reservationService = new ReservationsServis();
 const tourFeedbacksService = new FeedbacksServis();
 const tourService = new TourService();
-const container = document.querySelector('.tour-details-container') as HTMLElement;
+const container = document.querySelector(".tour-details-container") as HTMLElement;
 
 function renderTourData(tourId: string): void {
     tourService.getById(tourId)
         .then((response: Tour) => {
             const availableRoom = tourService.calculateAvailable(response);
+
             if (!container) {
-                console.error('Container not found');
+                console.error("Container not found");
                 return;
             }
 
-            container.innerHTML = '';
+            container.innerHTML = "";
 
-            // -------- Tour Info --------
-            const tourInfoSection = document.createElement('div');
+            const tourInfoSection = document.createElement("div");
             tourInfoSection.classList.add("tour-info-section");
             tourInfoSection.innerHTML = `
                 <section class="tour-title-section">
@@ -68,7 +68,7 @@ function renderTourData(tourId: string): void {
                 </section>
                 <section class="tour-images-section">
                     <div class="tour-images">
-                        <div id="map""></div>
+                        <div id="map"></div>
                         <img src="../../../assets/tour_preview.png" alt="Location Image" class="location-image">
                     </div>
                 </section>
@@ -77,7 +77,7 @@ function renderTourData(tourId: string): void {
                         <div class="meta-left">
                             <p><strong>Number of Guests:</strong> ${response.maxGuests}</p>
                             <p class="green"><strong>Still available:</strong> ${availableRoom}</p>
-                            <p><strong>Guide Name:</strong> ${response.guide?.username ?? 'Unknown'}</p>
+                            <p><strong>Guide Name:</strong> ${response.guide?.username ?? "Unknown"}</p>
                         </div>
                         <div class="meta-right">
                             <p><strong>Status:</strong> ${response.status}</p>
@@ -92,30 +92,32 @@ function renderTourData(tourId: string): void {
             `;
             container.appendChild(tourInfoSection);
 
-            // -------- Role logic --------
-            const reserveBtn = container.querySelector('.reserve-btn-wrapper') as HTMLElement;
-            const rateBtn = container.querySelector('.rate-btn-wrapper') as HTMLElement;
-            const closeReviewBtn = document.getElementById('close-review-btn') as HTMLButtonElement;
-            const submitReviewBtn = document.getElementById('submit-review-btn') as HTMLButtonElement;
-            const editBtn = container.querySelector('.edit-btn-wrapper') as HTMLElement;
-            const deleteBtn = container.querySelector('.delete-btn-wrapper') as HTMLElement;
+            const reserveBtn = container.querySelector(".reserve-btn-wrapper") as HTMLElement;
+            const rateBtn = container.querySelector(".rate-btn-wrapper") as HTMLElement;
+            const closeReviewBtn = document.getElementById("close-review-btn") as HTMLButtonElement;
+            const submitReviewBtn = document.getElementById("submit-review-btn") as HTMLButtonElement;
+            const editBtn = container.querySelector(".edit-btn-wrapper") as HTMLElement;
+            const deleteBtn = container.querySelector(".delete-btn-wrapper") as HTMLElement;
             const role = localStorage.getItem("role");
 
             if (role === "turista") {
                 editBtn.style.display = "none";
                 deleteBtn.style.display = "none";
-                
-                reserveBtn.onclick = () => {
+
+                reserveBtn.onclick = (event: MouseEvent) => {
                     event.stopPropagation();
                     window.location.href = `../../../tourReservations/pages/tourReservationsForm/tourReservationsForm.html?tourId=${response.id}`;
                 };
-                rateBtn.onclick = (event) => {
+
+                rateBtn.onclick = (event: MouseEvent) => {
                     event.stopPropagation();
                     openReviewPopup();
                 };
+
                 closeReviewBtn.onclick = () => {
                     closeReviewPopup();
                 };
+
                 submitReviewBtn.onclick = () => {
                     submitReview(response);
                 };
@@ -123,14 +125,17 @@ function renderTourData(tourId: string): void {
                 reserveBtn.style.display = "none";
                 rateBtn.style.display = "none";
 
-                editBtn.onclick = () => {
+                editBtn.onclick = (event: MouseEvent) => {
                     event.stopPropagation();
                     window.location.href = `../tourForm/tourForm.html?id=${response.id}`;
                 };
 
-                deleteBtn.onclick = () => {
-                    alert("Dali ste sigurni da zelite da obrisete turu?");
+                deleteBtn.onclick = (event: MouseEvent) => {
                     event.stopPropagation();
+
+                    const confirmed = window.confirm("Da li ste sigurni da zelite da obrisete turu?");
+                    if (!confirmed) return;
+
                     tourService.delete(response.id.toString())
                         .catch(error => console.error(error.status, error.text));
                 };
@@ -139,18 +144,18 @@ function renderTourData(tourId: string): void {
                 return;
             }
 
-            // -------- Keypoints --------
-            const keypointSection = document.createElement('section');
-            keypointSection.classList.add('keypoints-section');
+            const keypointSection = document.createElement("section");
+            keypointSection.classList.add("keypoints-section");
             keypointSection.innerHTML = `<h2>Key Points in Tour</h2>`;
+
             const keypoints = Array.isArray(response.keyPoints) ? response.keyPoints : [];
 
             if (keypoints.length === 0) {
-                keypointSection.innerHTML += '<p>No keypoints to show</p>';
+                keypointSection.innerHTML += "<p>No keypoints to show</p>";
             } else {
                 for (const kp of keypoints) {
-                    const kpBlock = document.createElement('div');
-                    kpBlock.classList.add('keypoint');
+                    const kpBlock = document.createElement("div");
+                    kpBlock.classList.add("keypoint");
                     kpBlock.innerHTML = `
                         <div class="keypoint-desc">
                             <p><strong>Name:</strong> ${kp.name}</p>
@@ -160,60 +165,70 @@ function renderTourData(tourId: string): void {
                         </div>
                         <div class="keypoint-img">
                             <img src="${kp.imageUrl}" alt="Key Point Image" style="max-width:300px;">
-                        </div>`;
+                        </div>
+                    `;
+
                     kpBlock.onclick = () => {
                         window.location.href = `../../../keypoints/pages/keypointDetails/keypointDetails.html?keypointId=${kp.id}`;
                     };
+
                     keypointSection.appendChild(kpBlock);
                 }
             }
+
             container.appendChild(keypointSection);
-            mapDisplay(keypoints);//Load map into container
-            
-            // -------- Feedbacks --------
-            const feedbackSection = document.createElement('section');
-            feedbackSection.classList.add('feedbacks-section');
+            mapDisplay(keypoints);
+
+            const feedbackSection = document.createElement("section");
+            feedbackSection.classList.add("feedbacks-section");
             feedbackSection.innerHTML = `<h2>Feedbacks</h2>`;
+
             const feedbacks = Array.isArray(response.tourFeedbacks) ? response.tourFeedbacks : [];
 
             if (feedbacks.length === 0) {
-                feedbackSection.innerHTML += `<p>No feedbacks yet.</p>`;
+                feedbackSection.innerHTML += "<p>No feedbacks yet.</p>";
             } else {
                 for (const fb of feedbacks) {
-                    const fbBlock = document.createElement('div');
-                    fbBlock.classList.add('feedback');
+                    const fbBlock = document.createElement("div");
+                    fbBlock.classList.add("feedback");
                     fbBlock.innerHTML = `
-                        <p><strong>Rating:</strong> ${'★'.repeat(fb.userRating)}${'☆'.repeat(5 - fb.userRating)}</p>
+                        <p><strong>Rating:</strong> ${"★".repeat(fb.userRating)}${"☆".repeat(5 - fb.userRating)}</p>
                         <p><strong>Comment:</strong> ${fb.userComment}</p>
-                        <p><strong>Date:</strong> ${formatDate(fb.postedOn)}</p>`;
+                        <p><strong>Date:</strong> ${formatDate(fb.postedOn)}</p>
+                    `;
                     feedbackSection.appendChild(fbBlock);
                 }
             }
+
             container.appendChild(feedbackSection);
 
-            // -------- Reservations --------
-            const reservationSection = document.createElement('section');
-            reservationSection.classList.add('reservations-section');
+            const reservationSection = document.createElement("section");
+            reservationSection.classList.add("reservations-section");
             reservationSection.innerHTML = `<h2>Reservations</h2>`;
+
             const reservations = Array.isArray(response.tourReservations) ? response.tourReservations : [];
 
             if (reservations.length === 0) {
-                reservationSection.innerHTML += `<p>No reservations yet.</p>`;
+                reservationSection.innerHTML += "<p>No reservations yet.</p>";
             } else {
                 for (const res of reservations) {
-                    const resBlock = document.createElement('div');
-                    resBlock.classList.add('reservation');
+                    const resBlock = document.createElement("div");
+                    resBlock.classList.add("reservation");
                     resBlock.innerHTML = `
                         <p><strong>User ID:</strong> ${res.userId}</p>
                         <p><strong>Number of Guests:</strong> ${res.numberOfGuests}</p>
-                        <button class="del-res-btn">Delete reservation</button>`;
-                    resBlock.querySelector('.del-res-btn')?.addEventListener('click', () => {
+                        <button class="del-res-btn">Delete reservation</button>
+                    `;
+
+                    resBlock.querySelector(".del-res-btn")?.addEventListener("click", () => {
                         reservationService.delete(res.id.toString());
                         location.reload();
                     });
+
                     reservationSection.appendChild(resBlock);
                 }
             }
+
             container.appendChild(reservationSection);
         })
         .catch(error => {
@@ -222,41 +237,40 @@ function renderTourData(tourId: string): void {
 }
 
 function trimText(text: string, maxLength: number = 250): string {
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
 }
 
 function formatDate(isoDateString: string): string {
     const date = new Date(isoDateString);
-    return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth()+1).toString().padStart(2, '0')}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1).toString().padStart(2, "0")}.${date.getFullYear()} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
 }
 
-// Feedback popup controls
-function openReviewPopup() {
-    document.getElementById('review-popup')?.classList.remove('hidden');
+function openReviewPopup(): void {
+    document.getElementById("review-popup")?.classList.remove("hidden");
 }
 
-function closeReviewPopup() {
-    document.getElementById('review-popup')?.classList.add('hidden');
+function closeReviewPopup(): void {
+    document.getElementById("review-popup")?.classList.add("hidden");
 }
 
-function submitReview(tour: Tour) {
-    const gradeSelect = document.getElementById('grade') as HTMLSelectElement | null;
-    const commentTextarea = document.getElementById('comment') as HTMLTextAreaElement | null;
+function submitReview(tour: Tour): void {
+    const gradeSelect = document.getElementById("grade") as HTMLSelectElement | null;
+    const commentTextarea = document.getElementById("comment") as HTMLTextAreaElement | null;
 
     if (!gradeSelect || !commentTextarea) {
         alert("Form elements not found.");
         return;
     }
 
-    const grade = parseInt(gradeSelect.value);
+    const grade = parseInt(gradeSelect.value, 10);
     const comment = commentTextarea.value.trim();
 
-    if (isNaN(grade) || comment === '') {
-        alert('Please fill out both fields.');
+    if (isNaN(grade) || comment === "") {
+        alert("Please fill out both fields.");
         return;
     }
 
-    const loggedInUser = localStorage.getItem("userId") || "null";
+    const loggedInUser = localStorage.getItem("userId");
     if (!loggedInUser) {
         alert("User not logged in.");
         return;
@@ -264,7 +278,7 @@ function submitReview(tour: Tour) {
 
     const formData: TourFeedbacks = {
         tourId: tour.id,
-        userId: parseInt(loggedInUser),
+        userId: parseInt(loggedInUser, 10),
         userRating: grade,
         userComment: comment,
         postedOn: new Date().toISOString()
@@ -275,29 +289,30 @@ function submitReview(tour: Tour) {
             statusMsg("new", grade, comment);
             gradeSelect.value = "";
             commentTextarea.value = "";
-            renderTourData(tour.id.toString()); // optional: refresh feedbacks
+            renderTourData(tour.id.toString());
         })
         .catch(error => {
             console.error(error);
             const msg = document.getElementById("error-msg");
-            if (msg) msg.textContent = error.message || "Došlo je do greške prilikom ocenjivanja.";
+            if (msg) {
+                msg.textContent = error.message || "Došlo je do greške prilikom ocenjivanja.";
+            }
         });
 }
 
-// Status message
 function statusMsg(action: string, grade?: number, comment?: string): void {
-    const status = document.getElementById('status-msg') as HTMLParagraphElement | null;
-    const text = document.getElementById('status-text') as HTMLSpanElement | null;
-    const bar = status?.querySelector('.status-bar') as HTMLDivElement | null;
+    const status = document.getElementById("status-msg") as HTMLParagraphElement | null;
+    const text = document.getElementById("status-text") as HTMLSpanElement | null;
+    const bar = status?.querySelector(".status-bar") as HTMLDivElement | null;
 
     if (!status || !text || !bar) return;
 
-    status.style.display = 'block';
-    text.textContent = 'Postupak u toku...';
+    status.style.display = "block";
+    text.textContent = "Postupak u toku...";
 
-    bar.classList.remove('status-bar');
+    bar.classList.remove("status-bar");
     void bar.offsetWidth;
-    bar.classList.add('status-bar');
+    bar.classList.add("status-bar");
 
     setTimeout(() => {
         text.textContent = action === "new"
@@ -306,53 +321,69 @@ function statusMsg(action: string, grade?: number, comment?: string): void {
     }, 4800);
 
     if (grade !== undefined && comment !== undefined) {
-        console.log('Submitted:', { grade, comment });
+        console.log("Submitted:", { grade, comment });
     }
 
     closeReviewPopup();
 }
 
-function mapDisplay(keypoints: Keypoint[]) {
-  if (keypoints.length > 0) {
-    const map = L.map('map').setView([keypoints[0].latitude, keypoints[0].longitude], 13);
+function mapDisplay(keypoints: Keypoint[]): void {
+    if (keypoints.length === 0) return;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+    const map = L.map("map").setView(
+        [keypoints[0].latitude, keypoints[0].longitude],
+        13
+    );
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
-    const waypoints = keypoints.map(kp => L.latLng(kp.latitude, kp.longitude));
+    const waypoints: L.LatLng[] = keypoints.map((kp) =>
+        L.latLng(kp.latitude, kp.longitude)
+    );
 
-    // Fit map initially to all waypoints (in case routing takes time)
-    map.fitBounds(L.latLngBounds(waypoints), { padding: [50, 50] });
+    map.fitBounds(L.latLngBounds(waypoints), {
+        padding: [50, 50]
+    });
+
+    const plan = L.Routing.plan(waypoints, {
+        createMarker: (i, wp, _n) =>
+            L.marker(wp.latLng).bindPopup(
+                `<b>${keypoints[i].name}</b><br>${keypoints[i].description}`
+            ),
+        addWaypoints: false,
+        draggableWaypoints: false
+    });
 
     const control = L.Routing.control({
-      waypoints: waypoints,
-      router: L.Routing.osrmv1(),
-      lineOptions: { styles: [{ color: 'blue', weight: 4, opacity: 0.7 }] },
-      createMarker: (i, wp) => 
-        L.marker(wp.latLng).bindPopup(`<b>${keypoints[i].name}</b><br>${keypoints[i].description}`),
-      show: false,         // hide the directions panel
-      addWaypoints: false, // disable adding waypoints by user
-      collapsible: false,
+        plan,
+        router: L.Routing.osrmv1(),
+        lineOptions: {
+            styles: [{ color: "blue", weight: 4, opacity: 0.7 }],
+            extendToWaypoints: true,
+            missingRouteTolerance: 0
+        },
+        show: false,
+        collapsible: false
     }).addTo(map);
 
-    control.on('routesfound', (e) => {
-      const route = e.routes[0];
-      if (route && route.bounds) {
-        // Delay slightly to make sure route is rendered before zooming
-        setTimeout(() => {
-          map.fitBounds(route.bounds, { padding: [50, 50] });
-        }, 100);
-      }
+    control.on("routesfound", (e: any) => {
+        const route = e.routes?.[0];
+
+        if (route?.bounds) {
+            setTimeout(() => {
+                map.fitBounds(route.bounds, { padding: [50, 50] });
+            }, 100);
+        }
     });
-  }
 }
 
-
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
     const queryString = window.location.search;
     const urlparams = new URLSearchParams(queryString);
-    const tourId = urlparams.get('tourId');
+    const tourId = urlparams.get("tourId");
+
     if (tourId) {
         renderTourData(tourId);
     }

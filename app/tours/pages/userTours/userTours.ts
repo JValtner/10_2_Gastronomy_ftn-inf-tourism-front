@@ -340,7 +340,7 @@ function renderChart(
         label: title,
         data,
         borderWidth: 2,
-        borderColor: 'rgba(255, 127, 80, 0.9)', // Coral
+        borderColor: 'rgba(81, 24, 4, 0.9)', // Coral
         backgroundColor: 'rgba(255, 127, 80, 0.7)', // Semi-transparent Coral
         borderRadius: 8, // rounded corners
       }]
@@ -404,47 +404,57 @@ function renderChart(
   });
 }
 
-function mapDisplay(keypoints: Keypoint[], mapEl: HTMLElement) {
+function mapDisplay(keypoints: Keypoint[], mapEl: HTMLElement): void {
   if (keypoints.length === 0) return;
 
-  // reset container
   mapEl.innerHTML = "";
 
   const map = L.map(mapEl, {
-    zoomControl: false,      // ❌ remove zoom +/- buttons
-    scrollWheelZoom: false,  // ❌ disable scroll zoom
-    doubleClickZoom: false,  // ❌ disable double-click zoom
-    attributionControl: false // ❌ remove attribution text
+    zoomControl: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    attributionControl: false
   });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '' // just in case
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: ""
   }).addTo(map);
 
-  const waypoints = keypoints.map(kp => L.latLng(kp.latitude, kp.longitude));
+  const waypoints: L.LatLng[] = keypoints.map((kp) =>
+    L.latLng(kp.latitude, kp.longitude)
+  );
 
-  // ✅ Always fit to all keypoints
-  map.fitBounds(L.latLngBounds(waypoints), { padding: [50, 50] });
+  map.fitBounds(L.latLngBounds(waypoints), {
+    padding: [50, 50]
+  });
 
-  // Routing control with waypoints
-  const control = L.Routing.control({
-    waypoints,
-    router: L.Routing.osrmv1(),
-    lineOptions: { styles: [{ color: 'blue', weight: 4, opacity: 0.7 }] },
-    createMarker: (i, wp) =>
+  const plan = L.Routing.plan(waypoints, {
+    createMarker: (i, wp, _n) =>
       L.marker(wp.latLng).bindPopup(
         `<b>${keypoints[i].name}</b><br>${keypoints[i].description}`
       ),
-    show: false,
     addWaypoints: false,
-    collapsible: false,
+    draggableWaypoints: false
+  });
+
+  const control = L.Routing.control({
+    plan,
+    router: L.Routing.osrmv1(),
+    lineOptions: {
+      styles: [{ color: "blue", weight: 4, opacity: 0.7 }],
+      extendToWaypoints: true,
+      missingRouteTolerance: 0
+    },
+    show: false,
+    collapsible: false
   }).addTo(map);
 
-  // ✅ If routing succeeds, adjust bounds again
-  control.on('routesfound', (e) => {
-    const route = e.routes[0];
-    if (route && route.bounds) {
-      map.fitBounds(route.bounds, { padding: [50, 50] });
+  control.on("routesfound", (e: L.Routing.RoutingResultEvent) => {
+    const route = e.routes?.[0];
+
+    if (route?.coordinates?.length) {
+      const bounds = L.latLngBounds(route.coordinates);
+      map.fitBounds(bounds, { padding: [50, 50] });
     }
   });
 }
